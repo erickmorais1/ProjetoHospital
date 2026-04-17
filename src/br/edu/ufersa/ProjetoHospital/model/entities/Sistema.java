@@ -42,6 +42,7 @@ public void editarPaciente(Medico medico, Paciente paciente, String novoEndereco
     if(medico!=null){
         paciente.setEndereco(novoEndereco);
         paciente.atualizarProntuario(novoProntuario);
+
     }
 }
 
