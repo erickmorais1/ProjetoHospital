@@ -59,7 +59,7 @@ public class Medico {
     }
   }
 
-  public void mudarValorConsulta(double valor){
+  public void setValorConsulta(double valor){
     if(valor>0){
       this.valorConsulta=valor;
     }
