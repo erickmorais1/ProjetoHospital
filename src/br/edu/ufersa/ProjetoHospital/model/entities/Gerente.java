@@ -1,5 +1,5 @@
 package br.edu.ufersa.ProjetoHospital.model.entities;
-//mandando novamente
+//mandando novamente.
 public class Gerente {
     private String nome;
     private String cpf;
