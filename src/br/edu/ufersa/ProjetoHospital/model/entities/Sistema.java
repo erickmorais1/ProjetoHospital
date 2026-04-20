@@ -128,4 +128,29 @@ public class Sistema {
         }
         return resultado;
     }
+
+    public List<Paciente> buscarPacientePorNome(String nome) {
+        return buscarPacienteNome(nome);
+    }
+
+    public List<Paciente> buscarPacientePorCpf(String cpf) {
+        return buscarPacienteCpf(cpf);
+    }
+
+    public List<Consulta> buscarConsultasDoMedico(Medico medico) {
+        return buscarConsultaPorMedico(medico);
+    }
+
+    public List<Consulta> buscarConsultasDoPaciente(Paciente paciente) {
+        return buscarConsultaPorPaciente(paciente);
+    }
+
+    public List<Consulta> buscarConsultasPorHorario(String diaHora) {
+        return buscarConsultaPorHorario(diaHora);
+    }
+
+    public List<Consulta> emitirRelatorioPorMedico(Medico medico) {
+        return gerarRelatorioPorMedico(medico);
+    }
+
 }
