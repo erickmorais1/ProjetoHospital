@@ -1,11 +1,12 @@
 package br.edu.ufersa.ProjetoHospital.model.entities;
 
-public class Paciente {
-  private String nome,endereco,cpf;
+public class Paciente extends Endereco {
+  private String nome,cpf;
+  private Endereco endereco;
   private Prontuario prontuario;
 
   public Paciente (){}
-  public Paciente (String nome, String endereco, String cpf){
+  public Paciente (String nome, Endereco endereco, String cpf){
     setNome(nome);
     setEndereco(endereco);
     setCpf(cpf);
@@ -15,7 +16,7 @@ public class Paciente {
   public String getNome(){
     return nome;
   }
-  public String getEndereco(){
+  public Endereco getEndereco(){
     return endereco;
   }
   public String getCpf(){
@@ -30,20 +31,14 @@ public class Paciente {
       this.nome = nome;
     }
   }
-  public void setEndereco (String endereco){
-    if(endereco!=null && !endereco.isEmpty()){
+  public void setEndereco (Endereco endereco){
+    if(endereco!=null){
       this.endereco = endereco;
     }
   }
   public void setCpf(String cpf){
     if(cpf!=null && cpf.length()==11){
       this.cpf = cpf;
-    }
-  }
-
-  public void mudarEndereco(String local){
-    if(local!=null && !local.isEmpty()){
-      this.endereco=local;
     }
   }
 

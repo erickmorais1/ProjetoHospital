@@ -39,7 +39,7 @@ public class Sistema {
         }
     }
 
-    public void editarPaciente(Medico medico, Paciente paciente, String novoEndereco, Prontuario novoProntuario) {
+    public void editarPaciente(Medico medico, Paciente paciente, Endereco novoEndereco, Prontuario novoProntuario) {
 //so vai ter como mudar o endereco e o prontuario, até pq ngm muda de nome direto e nem de cpf
         //so tem como editar se for medico
         if (medico != null) {

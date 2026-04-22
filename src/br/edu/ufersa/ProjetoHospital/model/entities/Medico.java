@@ -1,14 +1,14 @@
 package br.edu.ufersa.ProjetoHospital.model.entities;
 
-public class Medico {
-  private String crm,nome,cpf,endereco;
+public class Medico extends Endereco {
+  private String crm,nome,cpf;
+  private Endereco endereco;
   private double valorConsulta;
 
   public Medico(String nome,String cpf, String crm, String endereco, double valorConsulta){
     setNome(nome);
     setCpf(cpf);
     setCrm(crm);
-    setEndereco(endereco);
     setValorConsulta(valorConsulta);
   }
   public Medico(){}
@@ -24,10 +24,6 @@ public class Medico {
 
   public String getCpf(){
     return cpf;
-  }
-
-  public String getEndereco(){
-    return endereco;
   }
 
   public double getValorConsulta(){
@@ -50,12 +46,6 @@ public class Medico {
   public void setCpf(String cpf){
     if(cpf!=null && cpf.length()==11){
       this.cpf=cpf;
-    }
-  }
-
-  public void setEndereco(String endereco){
-    if(endereco!=null && !endereco.isEmpty()){
-      this.endereco = endereco;
     }
   }
 

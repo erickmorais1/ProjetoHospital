@@ -1,13 +1,15 @@
 package br.edu.ufersa.ProjetoHospital.model.entities;
 
+import java.time.LocalDate;
+
 public class Consulta {
     private int id;
     private Paciente paciente;
     private Medico medico;
-    private String diaHora;
+    private LocalDate diaHora;
     private String status;
 
-    public Consulta(int id, Paciente paciente, Medico medico, String diaHora) {
+    public Consulta(int id, Paciente paciente, Medico medico, LocalDate diaHora) {
         setId(id);
         setPaciente(paciente);
         setMedico(medico);
@@ -37,11 +39,10 @@ public class Consulta {
         this.medico = medico;
     }
 
-    public void setDiaHora(String diaHora) {
-        if (diaHora == null || diaHora.trim().isEmpty()) {
-            throw new IllegalArgumentException("Erro: A data e hora não podem ser vazias.");
+    public void setDiaHora(LocalDate diaHora) {
+        if (diaHora!= null) {
+            this.diaHora = diaHora;
         }
-        this.diaHora = diaHora;
     }
 
     // REGRAS DE NEGÓCIO
@@ -59,7 +60,7 @@ public class Consulta {
         }
     }
 
-    public void remarcar(String novaDiaHora) {
+    public void remarcar(LocalDate novaDiaHora) {
         if (!this.status.equals("Agendada")) {
             throw new IllegalStateException("Só é possível remarcar consultas que ainda estão 'Agendadas'.");
         }
@@ -71,7 +72,7 @@ public class Consulta {
     public int getId() { return id; }
     public Paciente getPaciente() { return paciente; }
     public Medico getMedico() { return medico; }
-    public String getDiaHora() { return diaHora; }
+    public LocalDate getDiaHora() { return diaHora; }
     public String getStatus() { return status; }
 
     @Override
