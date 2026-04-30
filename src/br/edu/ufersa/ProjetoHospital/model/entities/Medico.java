@@ -1,52 +1,24 @@
 package br.edu.ufersa.ProjetoHospital.model.entities;
 
-public class Medico extends Endereco {
-  private String crm,nome,cpf;
-  private Endereco endereco;
+public class Medico extends Pessoa {
+  private String crm;
   private double valorConsulta;
 
-  public Medico(String nome,String cpf, String crm, String endereco, double valorConsulta){
-    setNome(nome);
-    setCpf(cpf);
+  public Medico(String nome, String cpf, Endereco endereco, String crm, double valorConsulta){
+    super(nome,cpf,endereco);
     setCrm(crm);
     setValorConsulta(valorConsulta);
   }
-  public Medico(){}
-  
-  //getters
-  public String getNome(){
-    return nome;
+  public Medico(){
+      super();
   }
 
-  public String getCrm(){
-    return crm;
-  }
-
-  public String getCpf(){
-    return cpf;
-  }
 
   public double getValorConsulta(){
     return valorConsulta;
   }
-
-  //setters
-  public void setNome(String nome){
-    if(nome!=null && !nome.isEmpty()){
-      this.nome = nome;
-    }
-  }
-
-  public void setCrm(String crm){
-    if(crm!=null && !crm.isEmpty()){
-      this.crm = crm;
-    }
-  }
-
-  public void setCpf(String cpf){
-    if(cpf!=null && cpf.length()==11){
-      this.cpf=cpf;
-    }
+  public String getCrm(){
+    return crm;
   }
 
   public void setValorConsulta(double valor){
@@ -54,6 +26,11 @@ public class Medico extends Endereco {
       this.valorConsulta=valor;
     }
   }
-  
- 
+  public void setCrm(String crm){
+    if(crm != null){
+      this.crm=crm;
+    }
+  }
+
+
 }

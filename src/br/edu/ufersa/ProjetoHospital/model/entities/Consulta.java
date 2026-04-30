@@ -9,14 +9,12 @@ public class Consulta {
     private Medico medico;
     private LocalDate diaHora;
     private String status;
-    private Prontuario prontuario;
 
-    public Consulta(int id, Paciente paciente, Medico medico, LocalDate diaHora,Prontuario prontuario) {
+    public Consulta(int id, Paciente paciente, Medico medico, LocalDate diaHora) {
         setId(id);
         setPaciente(paciente);
         setMedico(medico);
         setDiaHora(diaHora);
-        setProntuario(prontuario);
         this.status = "Agendada"; // Status inicial padrão
     }
 
@@ -47,11 +45,7 @@ public class Consulta {
             this.diaHora = diaHora;
         }
     }
-    public void setProntuario(Prontuario prontuario) {
-        if (prontuario != null) {
-            this.prontuario = prontuario;
-        }
-    }
+
 
     // REGRAS DE NEGÓCIO
 

@@ -1,45 +1,17 @@
 package br.edu.ufersa.ProjetoHospital.model.entities;
 
-public class Paciente extends Endereco {
-  private String nome,cpf;
-  private Endereco endereco;
+public class Paciente extends Pessoa {
   private Prontuario prontuario;
 
   public Paciente (){}
-  public Paciente (String nome, Endereco endereco, String cpf){
-    setNome(nome);
-    setEndereco(endereco);
-    setCpf(cpf);
+  public Paciente (String nome, Endereco endereco, String cpf, Prontuario prontuario) {
+    super(nome,cpf,endereco);
+    atualizarProntuario(prontuario);
   }
 
-  //getters
-  public String getNome(){
-    return nome;
-  }
-  public Endereco getEndereco(){
-    return endereco;
-  }
-  public String getCpf(){
-    return cpf;
-  }
+
   public Prontuario getProntuario(){
     return prontuario;
-  }
-
-  public void setNome(String nome){
-    if(nome!=null && !nome.isEmpty()){
-      this.nome = nome;
-    }
-  }
-  public void setEndereco (Endereco endereco){
-    if(endereco!=null){
-      this.endereco = endereco;
-    }
-  }
-  public void setCpf(String cpf){
-    if(cpf!=null && cpf.length()==11){
-      this.cpf = cpf;
-    }
   }
 
  public void atualizarProntuario(Prontuario prontuario){
