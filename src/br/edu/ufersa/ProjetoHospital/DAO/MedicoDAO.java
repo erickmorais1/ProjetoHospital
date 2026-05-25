@@ -6,13 +6,13 @@ import java.util.List;
 import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
 
 
-public class MedicoDAO  {
-    private Connection con;
-    public MedicoDAO (Connection conexao) throws SQLException {
+        public class MedicoDAO  {
+        private Connection con;
+        public MedicoDAO (Connection conexao) throws SQLException {
         con = conexao;
-    }
+        }
 
-    public void addMedico(Medico medico) throws SQLException {
+        public void addMedico(Medico medico) throws SQLException {
         String sql = "INSERT INTO medico (nome,cpf,crm,valorConsulta)" +
                 "VALUES (?,?,?,?)";
         try{PreparedStatement ps = con.prepareStatement(sql);
@@ -23,9 +23,9 @@ public class MedicoDAO  {
         ps.executeUpdate();}catch(SQLException e){
             throw new SQLException();
         }
-    }
+        }
 
-    public Medico buscarMedicoPorCrm(String crm) throws SQLException {
+     public Medico buscarMedicoPorCrm(String crm) throws SQLException {
         try{
             String sql = "SELECT * FROM medico WHERE crm = ?";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -45,7 +45,7 @@ public class MedicoDAO  {
         return null;
     }
 
-    public Medico buscarMedicoPorCpf(String cpf) throws SQLException {
+        public Medico buscarMedicoPorCpf(String cpf) throws SQLException {
         try{
             String sql = "SELECT * FROM medico WHERE cpf = ?";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -65,7 +65,7 @@ public class MedicoDAO  {
         return null;
     }
 
-    public List<Medico> buscarMedicoPorNome(String nome) throws SQLException {
+        public List<Medico> buscarMedicoPorNome(String nome) throws SQLException {
         List<Medico> lista;
         try {
             String sql = "SELECT * FROM medico WHERE nome = ?";
@@ -87,6 +87,40 @@ public class MedicoDAO  {
         }
     }
 
+        public List<Medico> listarMedicos() throws SQLException{
+        String sql="SELECT * FROM medico";
+        List<Medico> lista = new ArrayList<>();
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+            Medico medico = new Medico();
+            medico.setNome(rs.getString("nome"));
+            medico.setCpf(rs.getString("cpf"));
+            medico.setCrm(rs.getString("crm"));
+            medico.setValorConsulta(rs.getDouble("valorConsulta"));
+            lista.add(medico);
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return lista;
+        }
+
+        public void excluirMedicoPorCrm(String crm) throws SQLException {
+            String sql = "DELETE FROM medico WHERE crm = ?";
+            try{
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1,crm);
+                ps.executeUpdate();
+            }catch (Exception e){
+                throw new SQLException(e);
+            }
+
+        }
 
 
-}
+
+
+
+    }
