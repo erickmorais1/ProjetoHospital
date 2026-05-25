@@ -6,7 +6,7 @@ import java.util.List;
 import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
 
 
-public class MedicoDAO {
+public class MedicoDAO  {
     private Connection con;
     public MedicoDAO (Connection conexao) throws SQLException {
         con = conexao;
