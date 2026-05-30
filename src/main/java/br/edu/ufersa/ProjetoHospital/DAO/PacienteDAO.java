@@ -15,6 +15,7 @@ import br.edu.ufersa.ProjetoHospital.model.entities.Endereco;
 import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
 import br.edu.ufersa.ProjetoHospital.model.entities.Prontuario;
 
+
 public class PacienteDAO {
 
     private static final Logger LOGGER = Logger.getLogger(PacienteDAO.class.getName());
@@ -25,9 +26,11 @@ public class PacienteDAO {
         if (con == null) {
             throw new IllegalArgumentException("A conexão com o banco de dados não pode ser nula.");
         }
- 
-     //Insere um novo paciente no banco de dados.
-     
+        this.con = con;
+    }
+    
+    //Insere um novo paciente no banco de dados.
+    
     public void addPaciente(Paciente paciente) throws SQLException {
         validarPaciente(paciente);
 
@@ -46,8 +49,9 @@ public class PacienteDAO {
             throw e;
         }
     }
-//Busca um paciente pelo CPF (chave única).
-      
+
+    //Busca um paciente pelo CPF (chave única).
+   
     public Paciente buscarPorCpf(String cpf) throws SQLException {
         validarCpf(cpf);
 
@@ -67,7 +71,7 @@ public class PacienteDAO {
         return null;
     }
 
-    //Busca pacientes pelo nome usando correspondência parcial (LIKE).
+    // Busca pacientes pelo nome usando correspondência parcial (LIKE).
 
     public List<Paciente> buscarPorNome(String nome) throws SQLException {
         if (nome == null || nome.isBlank()) {
@@ -89,15 +93,17 @@ public class PacienteDAO {
             throw e;
         }
 
-        // Retorna lista imutável quando vazia para sinalizar ausência de resultados sem expor mutabilidade
         return lista.isEmpty() ? Collections.emptyList() : lista;
     }
 
-    //Retorna todos os pacientes cadastrados.
+    // Retorna todos os pacientes cadastrados.
+
     public List<Paciente> listarTodos() throws SQLException {
         final String sql = "SELECT * FROM paciente";
         final List<Paciente> lista = new ArrayList<>();
 
+        // Ambos os recursos declarados no mesmo bloco try-with-resources,
+        // garantindo fechamento automático na ordem inversa: rs → ps.
         try (PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -111,10 +117,10 @@ public class PacienteDAO {
 
         return lista.isEmpty() ? Collections.emptyList() : lista;
     }
-  
-    //Atualiza o endereço e o prontuário de um paciente existente
-  
-    public void atualizar(Paciente paciente) throws SQLException {
+
+    //Atualiza o endereço e o prontuário de um paciente existente.
+
+    public int atualizar(Paciente paciente) throws SQLException {
         validarPaciente(paciente);
 
         final String sql =
@@ -125,33 +131,32 @@ public class PacienteDAO {
             definirParametrosEndereco(ps, paciente.getEndereco(), 1);
             definirParametrosProntuario(ps, paciente.getProntuario(), 2);
             ps.setString(4, paciente.getCpf());
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erro ao atualizar paciente com CPF: " + paciente.getCpf(), e);
             throw e;
         }
     }
 
-   //Remove um paciente do banco de dados pelo CPF.
-    
-    public void excluirPorCpf(String cpf) throws SQLException {
+    //Remove um paciente do banco de dados pelo CPF.
+
+    public int excluirPorCpf(String cpf) throws SQLException {
         validarCpf(cpf);
 
         final String sql = "DELETE FROM paciente WHERE cpf = ?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, cpf);
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erro ao excluir paciente com CPF: " + cpf, e);
             throw e;
         }
     }
 
-  
-    // Métodos auxiliares privados
-    traliza o mapeamento e evita duplicação de código nos métodos de leitura.
-     */
+    // Mapeia uma linha do {@link ResultSet} para um objeto {@link Paciente}.
+    // Centraliza o mapeamento e evita duplicação de código nos métodos de leitura.
+    
     private Paciente extrairPacienteDoResultSet(ResultSet rs) throws SQLException {
         Paciente paciente = new Paciente();
         paciente.setCpf(rs.getString("cpf"));
@@ -176,7 +181,7 @@ public class PacienteDAO {
         return paciente;
     }
 
-    //Define o parâmetro de endereço (rua) no {@link PreparedStatement}.
+    // Define o parâmetro de endereço (rua) no {@link PreparedStatement}.
 
     private void definirParametrosEndereco(PreparedStatement ps, Endereco endereco, int indiceBase)
             throws SQLException {
@@ -187,7 +192,7 @@ public class PacienteDAO {
         }
     }
 
-    //Define os parâmetros de prontuário (observações e data) no {@link PreparedStatement}.
+    // Define os parâmetros de prontuário (observações e data) no {@link PreparedStatement}.
 
     private void definirParametrosProntuario(PreparedStatement ps, Prontuario prontuario, int indiceBase)
             throws SQLException {
@@ -200,7 +205,7 @@ public class PacienteDAO {
         }
     }
 
-    // Valida as regras mínimas de um {@link Paciente} antes de operações de escrita
+    //Valida as regras mínimas de um {@link Paciente} antes de operações de escrita
     private void validarPaciente(Paciente paciente) {
         if (paciente == null) {
             throw new IllegalArgumentException("O paciente não pode ser nulo.");
