@@ -2,22 +2,24 @@ package br.edu.ufersa.ProjetoHospital.model.entities;
 
 import java.time.LocalDate;
 
-//mandando novamente.
 public class Prontuario {
     private String observacoes;
     private LocalDate data;
+
+    // construtor vazio para funcionar o PacienteDao
+    public Prontuario() {
+        this.observacoes = "Sem observações.";
+    }
 
     public Prontuario(LocalDate data) {
         if (data != null) {
             this.data = data;
         } else {
             System.out.println("Erro: A data do prontuário não pode ser vazia.");
-
         }
         this.observacoes = "Sem observações.";
     }
 
-    // Método definido no diagrama
     public void adicionarObs(String obs) {
         if (obs != null && !obs.trim().isEmpty()) {
             if (this.observacoes.equals("Sem observações.")) {
@@ -30,10 +32,7 @@ public class Prontuario {
         }
     }
 
-
-    public String getObservacoes() {
-        return observacoes;
-    }
+    public String getObservacoes() { return observacoes; }
 
     public void setObservacoes(String observacoes) {
         if (observacoes != null && !observacoes.trim().isEmpty()) {
@@ -43,9 +42,7 @@ public class Prontuario {
         }
     }
 
-    public LocalDate getData() {
-        return data;
-    }
+    public LocalDate getData() { return data; }
 
     public void setData(LocalDate data) {
         if (data != null) {

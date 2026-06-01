@@ -15,11 +15,9 @@ import br.edu.ufersa.ProjetoHospital.model.entities.Endereco;
 import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
 import br.edu.ufersa.ProjetoHospital.model.entities.Prontuario;
 
-
 public class PacienteDAO {
 
     private static final Logger LOGGER = Logger.getLogger(PacienteDAO.class.getName());
-
     private final Connection con;
 
     public PacienteDAO(Connection con) {
@@ -28,15 +26,12 @@ public class PacienteDAO {
         }
         this.con = con;
     }
-    
-    //Insere um novo paciente no banco de dados.
-    
+
     public void addPaciente(Paciente paciente) throws SQLException {
         validarPaciente(paciente);
-
         final String sql =
-            "INSERT INTO paciente (cpf, nome, endereco_rua, prontuario_observacoes, prontuario_data) " +
-            "VALUES (?, ?, ?, ?, ?)";
+                "INSERT INTO paciente (cpf, nome, endereco_rua, prontuario_observacoes, prontuario_data) " +
+                        "VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, paciente.getCpf());
@@ -50,11 +45,8 @@ public class PacienteDAO {
         }
     }
 
-    //Busca um paciente pelo CPF (chave única).
-   
     public Paciente buscarPorCpf(String cpf) throws SQLException {
         validarCpf(cpf);
-
         final String sql = "SELECT * FROM paciente WHERE cpf = ?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -70,8 +62,6 @@ public class PacienteDAO {
         }
         return null;
     }
-
-    // Busca pacientes pelo nome usando correspondência parcial (LIKE).
 
     public List<Paciente> buscarPorNome(String nome) throws SQLException {
         if (nome == null || nome.isBlank()) {
@@ -92,21 +82,15 @@ public class PacienteDAO {
             LOGGER.log(Level.SEVERE, "Erro ao buscar pacientes com nome: " + nome, e);
             throw e;
         }
-
         return lista.isEmpty() ? Collections.emptyList() : lista;
     }
-
-    // Retorna todos os pacientes cadastrados.
 
     public List<Paciente> listarTodos() throws SQLException {
         final String sql = "SELECT * FROM paciente";
         final List<Paciente> lista = new ArrayList<>();
 
-        // Ambos os recursos declarados no mesmo bloco try-with-resources,
-        // garantindo fechamento automático na ordem inversa: rs → ps.
         try (PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-
             while (rs.next()) {
                 lista.add(extrairPacienteDoResultSet(rs));
             }
@@ -114,18 +98,14 @@ public class PacienteDAO {
             LOGGER.log(Level.SEVERE, "Erro ao listar pacientes.", e);
             throw e;
         }
-
         return lista.isEmpty() ? Collections.emptyList() : lista;
     }
 
-    //Atualiza o endereço e o prontuário de um paciente existente.
-
     public int atualizar(Paciente paciente) throws SQLException {
         validarPaciente(paciente);
-
         final String sql =
-            "UPDATE paciente SET endereco_rua = ?, prontuario_observacoes = ?, prontuario_data = ? " +
-            "WHERE cpf = ?";
+                "UPDATE paciente SET endereco_rua = ?, prontuario_observacoes = ?, prontuario_data = ? " +
+                        "WHERE cpf = ?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             definirParametrosEndereco(ps, paciente.getEndereco(), 1);
@@ -138,11 +118,8 @@ public class PacienteDAO {
         }
     }
 
-    //Remove um paciente do banco de dados pelo CPF.
-
     public int excluirPorCpf(String cpf) throws SQLException {
         validarCpf(cpf);
-
         final String sql = "DELETE FROM paciente WHERE cpf = ?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -154,9 +131,6 @@ public class PacienteDAO {
         }
     }
 
-    // Mapeia uma linha do {@link ResultSet} para um objeto {@link Paciente}.
-    // Centraliza o mapeamento e evita duplicação de código nos métodos de leitura.
-    
     private Paciente extrairPacienteDoResultSet(ResultSet rs) throws SQLException {
         Paciente paciente = new Paciente();
         paciente.setCpf(rs.getString("cpf"));
@@ -170,21 +144,23 @@ public class PacienteDAO {
         }
 
         String obs  = rs.getString("prontuario_observacoes");
-        String data = rs.getString("prontuario_data");
-        if (obs != null || data != null) {
+        // corrigindo erro anterior e lendo a data como java.sql.Date do banco de dados
+        java.sql.Date dataSql = rs.getDate("prontuario_data");
+
+        if (obs != null || dataSql != null) {
             Prontuario prontuario = new Prontuario();
-            prontuario.setObservacoes(obs);
-            prontuario.setData(data);
+            if (obs != null) prontuario.setObservacoes(obs);
+
+            // corrigindo erro anterior e convertendo para LocalDate
+            if (dataSql != null) prontuario.setData(dataSql.toLocalDate());
+
             paciente.atualizarProntuario(prontuario);
         }
 
         return paciente;
     }
 
-    // Define o parâmetro de endereço (rua) no {@link PreparedStatement}.
-
-    private void definirParametrosEndereco(PreparedStatement ps, Endereco endereco, int indiceBase)
-            throws SQLException {
+    private void definirParametrosEndereco(PreparedStatement ps, Endereco endereco, int indiceBase) throws SQLException {
         if (endereco != null) {
             ps.setString(indiceBase, endereco.getRua());
         } else {
@@ -192,20 +168,22 @@ public class PacienteDAO {
         }
     }
 
-    // Define os parâmetros de prontuário (observações e data) no {@link PreparedStatement}.
-
-    private void definirParametrosProntuario(PreparedStatement ps, Prontuario prontuario, int indiceBase)
-            throws SQLException {
+    private void definirParametrosProntuario(PreparedStatement ps, Prontuario prontuario, int indiceBase) throws SQLException {
         if (prontuario != null) {
-            ps.setString(indiceBase,     prontuario.getObservacoes());
-            ps.setString(indiceBase + 1, prontuario.getData());
+            ps.setString(indiceBase, prontuario.getObservacoes());
+
+            // corrigindo erro anterior e verificando e convertendo LocalDate para java.sql.Date antes de salvar
+            if (prontuario.getData() != null) {
+                ps.setDate(indiceBase + 1, java.sql.Date.valueOf(prontuario.getData()));
+            } else {
+                ps.setNull(indiceBase + 1, Types.DATE);
+            }
         } else {
             ps.setNull(indiceBase,     Types.VARCHAR);
-            ps.setNull(indiceBase + 1, Types.VARCHAR);
+            ps.setNull(indiceBase + 1, Types.DATE);
         }
     }
 
-    //Valida as regras mínimas de um {@link Paciente} antes de operações de escrita
     private void validarPaciente(Paciente paciente) {
         if (paciente == null) {
             throw new IllegalArgumentException("O paciente não pode ser nulo.");
@@ -216,7 +194,6 @@ public class PacienteDAO {
         }
     }
 
-    // Valida o formato básico do CPF (presença e não-vazio)
     private void validarCpf(String cpf) {
         if (cpf == null || cpf.isBlank()) {
             throw new IllegalArgumentException("O CPF não pode ser nulo ou vazio.");
