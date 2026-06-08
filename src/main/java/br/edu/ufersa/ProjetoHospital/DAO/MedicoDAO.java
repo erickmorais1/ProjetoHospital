@@ -20,8 +20,9 @@ import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
         ps.setString(2, medico.getCpf());
         ps.setString(3, medico.getCrm());
         ps.setDouble(4, medico.getValorConsulta());
-        ps.executeUpdate();}catch(SQLException e){
-            throw new SQLException();
+        ps.executeUpdate();}  catch(SQLException e){
+            e.printStackTrace();
+            throw e;
         }
         }
 

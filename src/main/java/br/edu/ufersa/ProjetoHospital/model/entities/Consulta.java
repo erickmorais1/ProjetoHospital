@@ -18,6 +18,8 @@ public class Consulta {
         this.status = "Agendada"; // Status inicial padrão
     }
 
+    public Consulta() {}
+
     // SETTERS COM VALIDAÇÃO 
     public void setId(int id) {
         if (id <= 0) {
@@ -81,5 +83,11 @@ public class Consulta {
     public String toString() {
         return String.format("Consulta [ID: %d] | Paciente: %s | Médico: %s | Data: %s | Status: %s",
                 id, paciente.getNome(), medico.getNome(), diaHora, status);
+    }
+
+    public void setStatus(String status) {
+        if(status!=null){
+            this.status = status;
+        }
     }
 }
