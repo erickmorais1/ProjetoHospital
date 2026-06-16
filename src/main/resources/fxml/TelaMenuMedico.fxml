@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="br.edu.ufersa.ProjetoHospital.Controller.MenuMedicoController"
+      alignment="CENTER"
+      spacing="15">
+
+    <Label text="Área do Médico"/>
+
+    <Button fx:id="btnCadastrarConsulta"
+            text="Cadastrar Consulta"
+            onAction="#abrirCadastrarConsulta"/>
+
+    <Button text="Buscar Consulta"/>
+
+    <Button text="Listar Consultas"/>
+
+    <Button text="Remover Consulta"/>
+
+    <Button text="Adicionar Observação"/>
+
+    <Button text="Sair"/>
+
+</VBox>
