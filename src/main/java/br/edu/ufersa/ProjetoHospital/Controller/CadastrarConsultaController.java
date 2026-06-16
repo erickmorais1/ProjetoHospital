@@ -25,6 +25,6 @@ public class CadastrarConsultaController {
 
         System.out.println("ID digitado: " + id);
 
-        System.out.println("Data escolhida: " + dpDataConsulta.getValue());
+        System.out.println("Data escolhida: " + dpDataConsulta.getValue()) ;
     }
 }
