@@ -6,8 +6,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 public class CadastrarConsultaController {
-    @FXML
-    private TextField txtIdConsulta;
 
     @FXML
     private DatePicker dpDataConsulta;
@@ -19,12 +17,10 @@ public class CadastrarConsultaController {
     private Button btnVoltar;
 
     @FXML
+    private TextField txtCpfPaciente;
+
+    @FXML
     private void cadastrarConsulta() {
-
-        String id = txtIdConsulta.getText();
-
-        System.out.println("ID digitado: " + id);
-
         System.out.println("Data escolhida: " + dpDataConsulta.getValue()) ;
     }
 }

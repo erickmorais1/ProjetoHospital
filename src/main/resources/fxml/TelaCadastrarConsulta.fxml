@@ -11,17 +11,19 @@
       alignment="CENTER"
       spacing="15">
 
+
     <Button fx:id="btnCadastrar"
             text="Cadastrar"
             onAction="#cadastrarConsulta"/>
 
-    <TextField fx:id="txtIdConsulta"
-               promptText="ID da Consulta"/>
+    <TextField fx:id="txtCpfPaciente"
+               promptText="CPF do Paciente"/>
+
 
     <DatePicker fx:id="dpDataConsulta"/>
 
 
     <Button fx:id="btnVoltar"
-            text="Voltar"/ >
+            text="Voltar"/>
 
 </VBox>
