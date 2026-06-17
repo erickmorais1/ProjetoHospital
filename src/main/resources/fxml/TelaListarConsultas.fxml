@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="br.edu.ufersa.ProjetoHospital.Controller.ListarConsultasController"
+      alignment="CENTER"
+      spacing="10">
+
+    <TableView fx:id="tabelaConsultas">
+
+        <columns>
+
+            <TableColumn fx:id="colId"
+                         text="ID"/>
+
+            <TableColumn fx:id="colPaciente"
+                         text="Paciente"/>
+
+            <TableColumn fx:id="colMedico"
+                         text="Médico"/>
+
+            <TableColumn fx:id="colData"
+                         text="Data"/>
+
+            <TableColumn fx:id="colStatus"
+                         text="Status"/>
+
+        </columns>
+
+    </TableView>
+
+    <Button fx:id="btnVoltar"
+            text="Voltar"/>
+
+</VBox>

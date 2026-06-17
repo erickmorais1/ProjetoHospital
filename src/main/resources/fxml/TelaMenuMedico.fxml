@@ -17,7 +17,8 @@
 
     <Button text="Buscar Consulta"/>
 
-    <Button text="Listar Consultas"/>
+    <Button text="Listar Consultas"
+            onAction="#abrirListarConsultas"/>
 
     <Button text="Remover Consulta"/>
 
