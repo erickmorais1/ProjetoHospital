@@ -1,6 +1,7 @@
 package br.edu.ufersa.ProjetoHospital.Controller;
 
 import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
+import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,59 +9,44 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class MenuMedicoController {
 
-    @FXML
-    public void abrirCadastrarConsulta(javafx.event.ActionEvent actionEvent) {
-
-        try {
-
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/TelaCadastrarConsulta.fxml")
-            );
-
-            Scene scene = new Scene(loader.load());
-
-            Stage stage = (Stage) ((Node) actionEvent.getSource())
-                    .getScene()
-                    .getWindow();
-
-            stage.setScene(scene);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+public class MenuMedicoController implements FacadeController {
 
     private HospitalFacade facade;
 
-    public void setFacade(HospitalFacade facade) {
-        this.facade = facade;
+    @FXML
+    public void abrirCadastrarConsulta(ActionEvent event) {
+        System.out.println("Facade é null? " + (facade == null));
+        TrocaTela.trocarTela(event,
+                "/fxml/TelaCadastrarConsulta.fxml",
+                facade);
     }
 
     @FXML
-    public void abrirListarConsultas(javafx.event.ActionEvent actionEvent) {
+    public void abrirListarConsultas(ActionEvent event) {
 
-        try {
+        System.out.println("Facade no MenuMedicoController é null? "
+                + (facade == null));
 
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/TelaListarConsultas.fxml")
-            );
+        TrocaTela.trocarTela(
+                event,
+                "/fxml/TelaListarConsultas.fxml",
+                facade);
+    }
 
-            Scene scene = new Scene(loader.load());
-            ListarConsultasController controller =
-                    loader.getController();
+    public void setFacade(HospitalFacade facade) {
+        this.facade = facade;
+        System.out.println(getClass().getSimpleName()
+                + " recebeu facade: " + (facade != null));
+    }
 
-            controller.setFacade(facade);
-
-            Stage stage = (Stage) ((Node) actionEvent.getSource())
-                    .getScene()
-                    .getWindow();
-
-            stage.setScene(scene);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @FXML
+    public void sair(ActionEvent event) {
+        System.out.println("Facade é null? " + (facade == null));
+        TrocaTela.trocarTela(
+                event,
+                "/fxml/TelaLogin.fxml",
+                facade
+        );
     }
 }

@@ -24,6 +24,7 @@
 
     <Button text="Adicionar Observação"/>
 
-    <Button text="Sair"/>
+    <Button text="Sair"
+            onAction="#sair"/>
 
 </VBox>
