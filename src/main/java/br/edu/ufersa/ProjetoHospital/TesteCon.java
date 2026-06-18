@@ -4,6 +4,11 @@ import br.edu.ufersa.ProjetoHospital.DAO.ConexaoBD;
 import br.edu.ufersa.ProjetoHospital.DAO.ConsultaDAO;
 import br.edu.ufersa.ProjetoHospital.DAO.MedicoDAO;
 import br.edu.ufersa.ProjetoHospital.DAO.PacienteDAO;
+import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
+import br.edu.ufersa.ProjetoHospital.Factory.HospitalFactory;
+import br.edu.ufersa.ProjetoHospital.Service.ConsultaService;
+import br.edu.ufersa.ProjetoHospital.Service.MedicoService;
+import br.edu.ufersa.ProjetoHospital.Service.PacienteService;
 import br.edu.ufersa.ProjetoHospital.model.entities.*;
 
 import java.sql.Connection;
@@ -15,29 +20,44 @@ public class TesteCon {
 
     public static void main(String[] args) throws SQLException {
         Connection con = ConexaoBD.getConnection();
+
+        MedicoDAO medicoDAO = new MedicoDAO(con);
+        MedicoService medicoService = new MedicoService(medicoDAO);
         ConsultaDAO consultaDAO = new ConsultaDAO(con);
+        ConsultaService consultaService = new ConsultaService(consultaDAO);
+        PacienteDAO pacienteDAO = new PacienteDAO(con);
+        PacienteService pacienteService = new PacienteService(pacienteDAO);
 
-        Paciente paciente = new Paciente();
-        paciente.setCpf("22222222222");
+        HospitalFacade facade = new HospitalFacade(medicoService, consultaService, pacienteService);
+        Endereco enderecoGerente = new Endereco();
+        enderecoGerente.setRua("Av.Vignt Rosado");
 
-        Medico medico = new Medico();
-        medico.setCrm("CRM12345");
+        Gerente gerente = new Gerente("Erick","701.279.174-89",
+                enderecoGerente,"0921");
 
-        Consulta consulta = new Consulta();
-        consulta.setPaciente(paciente);
-        consulta.setMedico(medico);
-        consulta.setDiaHora(java.time.LocalDate.now());
-        consulta.setStatus("Agendada");
+        Endereco endereco = new Endereco();
+        endereco.setRua("Rua da Facade");
 
-        Consulta consulta1 = consultaDAO.buscarConsultaPorId(1);
+        Medico medico = HospitalFactory.criarMedico(
+                "Joao Targino",
+                "88875990777",
+                endereco,
+                "CRM145",
+                300.0
+        );
 
-        consulta1.setStatus("Concluida");
-        consulta1.setDiaHora(java.time.LocalDate.now());
+        facade.addMedico(gerente, medico);
 
-        consultaDAO.atualizarConsulta(consulta1);
+        System.out.println("Médico cadastrado pela Facade!");
+        List<Medico> medicos = facade.listarMedicos();
 
-        System.out.println("Consulta atualizada!");
-
+        for (Medico m : medicos) {
+            System.out.println("Nome: " + m.getNome());
+            System.out.println("CPF: " + m.getCpf());
+            System.out.println("CRM: " + m.getCrm());
+            System.out.println("Valor da consulta: " + m.getValorConsulta());
+            System.out.println("---------------------------");
+        }
 
 
 

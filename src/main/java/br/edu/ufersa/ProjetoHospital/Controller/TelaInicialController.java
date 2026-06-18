@@ -1,37 +1,37 @@
 package br.edu.ufersa.ProjetoHospital.Controller;
 
-import javafx.fxml.FXML;
-import javafx.stage.Stage;
-import javafx.scene.Node;
+import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
+import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 
-public class TelaInicialController {
+public class TelaInicialController implements  FacadeController{
 
+    private HospitalFacade facade;
 
     @FXML
     private void irParaLogin(ActionEvent event) {
-        trocarTela(event, "/fxml/TelaLogin.fxml");
+        System.out.println("Facade é null? " + (facade == null));
+        TrocaTela.trocarTela(
+                event,
+                "/fxml/TelaLogin.fxml",
+                facade
+        );
     }
 
     @FXML
     private void irParaPaciente(ActionEvent event) {
-        trocarTela(event, "/fxml/TelaPaciente.fxml");
+        System.out.println("Facade é null? " + (facade == null));
+        TrocaTela.trocarTela(
+                event,
+                "/fxml/TelaPaciente.fxml",
+                facade
+        );
     }
 
-    private void trocarTela(ActionEvent event, String fxml) {
-        try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource(fxml)
-            );
-
-            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load());
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void setFacade(HospitalFacade facade) {
+        this.facade = facade;
+        System.out.println(getClass().getSimpleName()
+                + " recebeu facade: " + (facade != null));
     }
 }

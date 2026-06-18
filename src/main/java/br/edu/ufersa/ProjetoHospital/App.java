@@ -1,27 +1,61 @@
-package br.edu.ufersa.ProjetoHospital;
+    package br.edu.ufersa.ProjetoHospital;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+    import br.edu.ufersa.ProjetoHospital.Controller.CadastrarConsultaController;
+    import br.edu.ufersa.ProjetoHospital.Controller.LoginController;
+    import br.edu.ufersa.ProjetoHospital.Controller.MenuMedicoController;
+    import br.edu.ufersa.ProjetoHospital.Controller.TelaInicialController;
+    import br.edu.ufersa.ProjetoHospital.DAO.ConexaoBD;
+    import br.edu.ufersa.ProjetoHospital.DAO.ConsultaDAO;
+    import br.edu.ufersa.ProjetoHospital.DAO.MedicoDAO;
+    import br.edu.ufersa.ProjetoHospital.DAO.PacienteDAO;
+    import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
+    import br.edu.ufersa.ProjetoHospital.Service.ConsultaService;
+    import br.edu.ufersa.ProjetoHospital.Service.MedicoService;
+    import br.edu.ufersa.ProjetoHospital.Service.PacienteService;
+    import javafx.application.Application;
+    import javafx.fxml.FXMLLoader;
+    import javafx.scene.Scene;
+    import javafx.stage.Stage;
 
-public class App extends Application {
+    import java.sql.Connection;
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    public class App extends Application {
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/TelaInicial.fxml")
-        );
+        private HospitalFacade facade;
 
-        Scene scene = new Scene(loader.load());
+        @Override
+        public void start(Stage stage) throws Exception {
 
-        stage.setTitle("Sistema Hospitalar");
-        stage.setScene(scene);
-        stage.show();
-    }
+            Connection con = ConexaoBD.getConnection();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
+            MedicoDAO medicoDAO = new MedicoDAO(con);
+            MedicoService medicoService = new MedicoService(medicoDAO);
+
+            ConsultaDAO consultaDAO = new ConsultaDAO(con);
+            ConsultaService consultaService = new ConsultaService(consultaDAO);
+
+            PacienteDAO pacienteDAO = new PacienteDAO(con);
+            PacienteService pacienteService = new PacienteService(pacienteDAO);
+
+            facade = new HospitalFacade(
+                    medicoService,
+                    consultaService,
+                    pacienteService
+            );
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/TelaInicial.fxml")
+            );
+
+            Scene scene = new Scene(loader.load());
+
+            TelaInicialController controller = loader.getController();
+            controller.setFacade(facade);
+
+            stage.setTitle("Sistema Hospitalar");
+            stage.setScene(scene);
+            stage.setFullScreenExitHint("");
+            stage.setFullScreen(true);
+            stage.show();
+        }
+        }
