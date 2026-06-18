@@ -2,6 +2,7 @@ package br.edu.ufersa.ProjetoHospital.Controller;
 
 import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
 import br.edu.ufersa.ProjetoHospital.Service.PacienteService;
+import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
 import br.edu.ufersa.ProjetoHospital.model.entities.Endereco;
 import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
 import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
@@ -9,10 +10,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-
+import javafx.event.ActionEvent;
 import java.sql.SQLException;
 
-public class CadastrarConsultaController {
+
+public class CadastrarConsultaController implements FacadeController {
 
     @FXML
     private DatePicker dpDataConsulta;
@@ -68,7 +70,17 @@ public class CadastrarConsultaController {
         System.out.println("Data: " + dpDataConsulta.getValue());
     }
 
+
     public void setFacade(HospitalFacade facade) {
         this.facade = facade;
+        System.out.println(getClass().getSimpleName()
+                + " recebeu facade: " + (facade != null));
+    }
+
+
+    @FXML
+    public void Voltar(ActionEvent event) {
+        System.out.println("Facade é null? " + (facade == null));
+        TrocaTela.trocarTela(event, "/fxml/TelaMenuMedico.fxml",facade);
     }
 }
