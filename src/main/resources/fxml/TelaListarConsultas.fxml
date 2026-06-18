@@ -34,6 +34,8 @@
     </TableView>
 
     <Button fx:id="btnVoltar"
-            text="Voltar"/>
+            text="Voltar"
+    onAction="#Voltar"/>
+
 
 </VBox>
