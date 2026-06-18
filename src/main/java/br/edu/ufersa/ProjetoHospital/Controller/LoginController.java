@@ -1,28 +1,56 @@
 package br.edu.ufersa.ProjetoHospital.Controller;
 
+import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
+import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-public class LoginController {
+public class LoginController implements FacadeController{
+
     @FXML
     private TextField txtUsuario;
 
     @FXML
     private PasswordField txtSenha;
 
-    @FXML
-    private Button btnEntrar;
+    private HospitalFacade facade;
+
+    public void setFacade(HospitalFacade facade) {
+        this.facade = facade;
+        System.out.println(getClass().getSimpleName()
+                + " recebeu facade: " + (facade != null));
+    }
 
     @FXML
-    private void entrar() {
+    public void entrar(ActionEvent event) {
 
         String usuario = txtUsuario.getText();
         String senha = txtSenha.getText();
 
-        System.out.println("Usuário: " + usuario);
-        System.out.println("Senha: " + senha);
-    }
+        if (usuario.equals("medico") && senha.equals("123")) {
+            System.out.println("Facade é null? " + (facade == null));
+            TrocaTela.trocarTela(
+                    event,
+                    "/fxml/TelaMenuMedico.fxml",
+                    facade
+            );
 
+        } else {
+
+            System.out.println("Usuário ou senha inválidos.");
+
+        }
+    }
+    @FXML
+    public void voltar(ActionEvent event) {
+
+        TrocaTela.trocarTela(
+                event,
+                "/fxml/TelaInicial.fxml",
+                facade
+        );
+
+    }
 }

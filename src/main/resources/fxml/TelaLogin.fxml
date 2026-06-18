@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="br.edu.ufersa.ProjetoHospital.Controller.LoginController"
+      alignment="CENTER"
+      spacing="15">
+
+    <Label text="Sistema Hospitalar"/>
+
+    <TextField fx:id="txtUsuario"
+               promptText="Usuário"/>
+
+    <PasswordField fx:id="txtSenha"
+                   promptText="Senha"/>
+
+    <Button text="Entrar"
+            onAction="#entrar"/>
+
+    <Button text="Voltar"
+            onAction="#voltar"/>
+
+</VBox>
