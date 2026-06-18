@@ -84,7 +84,14 @@ public class ConsultaDAO {
 
     public List<Consulta> listarTodas() throws SQLException {
         List<Consulta> lista = new ArrayList<>();
-        String sql = "SELECT * FROM consulta";
+        String sql = """
+    SELECT c.*,
+           p.nome AS nomePaciente,
+           m.nome AS nomeMedico
+    FROM consulta c
+    JOIN paciente p ON c.paciente_cpf = p.cpf
+    JOIN medico m ON c.medico_crm = m.crm
+    """;
 
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -102,9 +109,14 @@ public class ConsultaDAO {
     private Consulta mapearResultSetParaConsulta(ResultSet rs) throws SQLException {
         Paciente paciente = new Paciente();
         paciente.setCpf(rs.getString("paciente_cpf"));
+        paciente.setNome(rs.getString("nomePaciente"));
 
         Medico medico = new Medico();
         medico.setCrm(rs.getString("medico_crm"));
+        medico.setNome(rs.getString("nomeMedico"));
+
+        paciente.setNome(rs.getString("nomePaciente"));
+        medico.setNome(rs.getString("nomeMedico"));
 
         LocalDate data = rs.getDate("diaHora").toLocalDate();
         int id = rs.getInt("id");
