@@ -39,11 +39,11 @@ public class TesteCon {
         endereco.setRua("Rua da Facade");
 
         Medico medico = HospitalFactory.criarMedico(
-                "Joao Targino",
-                "88875990777",
+                "Lucas",
+                "00000000000",
                 endereco,
-                "CRM145",
-                300.0
+                "CRM999",
+                150.0
         );
 
         facade.addMedico(gerente, medico);
@@ -58,10 +58,5 @@ public class TesteCon {
             System.out.println("Valor da consulta: " + m.getValorConsulta());
             System.out.println("---------------------------");
         }
-
-
-
-
-
     }
 }
