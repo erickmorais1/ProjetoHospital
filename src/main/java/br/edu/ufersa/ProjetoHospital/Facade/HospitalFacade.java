@@ -151,4 +151,44 @@ public class HospitalFacade {
         // TODO: Atualizar senha no banco de dados
         System.out.println("TODO: Implementar alterarSenha com validação");
     }
+
+    public Consulta buscarConsulta(int id)
+            throws SQLException {
+
+        return consultaService.buscarConsulta(id);
+
+    }
+
+    public void removerConsulta(int id)
+            throws SQLException {
+
+        consultaService.removerConsulta(id);
+
+    }
+
+    public List<Consulta> listarConsultasPorCpf(String cpf)
+            throws SQLException {
+
+        return consultaService.listarConsultasPorCpf(cpf);
+
+    }
+
+    public List<Consulta> listarConsultasPorMedico(String crm)
+            throws SQLException {
+
+        return consultaService.listarConsultasPorMedico(crm);
+
+    }
+
+    public void adicionarObservacao(int id,
+                                    String observacao)
+            throws SQLException {
+
+        consultaService.adicionarObservacao(
+                id,
+                observacao);
+
+    }
+
+
 }
