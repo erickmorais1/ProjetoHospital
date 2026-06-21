@@ -52,4 +52,103 @@ public class HospitalFacade {
 
         return consultaService.listarTodasAsConsultas();
     }
+    // ===== MÉTODOS PARA GERENCIAR MÉDICOS =====
+
+    /**
+     * Remove um médico do sistema
+     * Apenas o gerente pode remover médicos
+     */
+    public void removerMedico(Gerente gerente, String crm) throws SQLException {
+        if (gerente == null) {
+            throw new IllegalStateException("Apenas gerente pode remover médicos");
+        }
+        medicoService.excluirMedico(gerente, crm);
+    }
+
+    /**
+     * Busca um médico pelo CRM
+     */
+    public Medico buscarMedicoPorCrm(String crm) throws SQLException {
+        if (crm == null || crm.isBlank()) {
+            throw new IllegalArgumentException("CRM não pode ser nulo");
+        }
+        return medicoService.buscarMedicoPorCrm(crm);
+    }
+
+    /**
+     * Busca um médico pelo CPF
+     */
+    public Medico buscarMedicoPorCpf(String cpf) throws SQLException {
+        if (cpf == null || cpf.isBlank()) {
+            throw new IllegalArgumentException("CPF não pode ser nulo");
+        }
+        return medicoService.buscarMedicoPorCpf(cpf);
+    }
+
+    /**
+     * Busca médicos pelo nome
+     */
+    public List<Medico> buscarMedicosPorNome(String nome) throws SQLException {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome não pode ser nulo");
+        }
+        return medicoService.buscarMedicoPorNome(nome);
+    }
+
+    /**
+     * Atualiza dados de um médico
+     */
+    public void atualizarMedico(Medico medico) throws SQLException {
+        if (medico == null) {
+            throw new IllegalArgumentException("Médico não pode ser nulo");
+        }
+        // TODO: Implementar através de MedicoService
+        // medicoService.atualizarMedico(medico);
+        System.out.println("TODO: Implementar atualizarMedico em MedicoService");
+    }
+
+    // ===== MÉTODOS PARA GERENCIAR GERENTE =====
+
+    /**
+     * Obtém o gerente atual da sessão
+     * TODO: Implementar sistema de autenticação/sessão
+     */
+    public Gerente obterGerenteAtual() {
+        // TODO: Retornar gerente da sessão/autenticação
+        System.out.println("TODO: Implementar obterGerenteAtual com sessão");
+        return null;
+    }
+
+    /**
+     * Atualiza dados do gerente
+     */
+    public void atualizarGerente(Gerente gerente) throws SQLException {
+        if (gerente == null) {
+            throw new IllegalArgumentException("Gerente não pode ser nulo");
+        }
+        // TODO: Implementar através de GerenteService
+        // gerenteService.atualizar(gerente);
+        System.out.println("TODO: Implementar atualizarGerente em GerenteService");
+    }
+
+    /**
+     * Altera a senha do gerente
+     */
+    public void alterarSenha(String cpf, String senhaAtual, String novaSenha)
+            throws SQLException, Exception {
+
+        if (cpf == null || cpf.isBlank()) {
+            throw new IllegalArgumentException("CPF não pode ser nulo");
+        }
+        if (senhaAtual == null || senhaAtual.isBlank()) {
+            throw new IllegalArgumentException("Senha atual não pode ser nula");
+        }
+        if (novaSenha == null || novaSenha.isBlank()) {
+            throw new IllegalArgumentException("Nova senha não pode ser nula");
+        }
+
+        // TODO: Validar senha atual
+        // TODO: Atualizar senha no banco de dados
+        System.out.println("TODO: Implementar alterarSenha com validação");
+    }
 }
