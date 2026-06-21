@@ -29,6 +29,10 @@
             <TableColumn fx:id="colStatus"
                          text="Status"/>
 
+            <TableColumn fx:id="colObservacao"
+                         text="Observação"
+                         prefWidth="250"/>
+
         </columns>
 
     </TableView>

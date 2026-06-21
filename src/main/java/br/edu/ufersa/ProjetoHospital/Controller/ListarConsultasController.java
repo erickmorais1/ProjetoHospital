@@ -27,6 +27,9 @@ public class ListarConsultasController implements FacadeController{
     private TableView<Consulta> tabelaConsultas;
 
     @FXML
+    private TableColumn<Consulta, String> colObservacao;
+
+    @FXML
     private TableColumn<Consulta, Integer> colId;
 
     @FXML
@@ -57,6 +60,9 @@ public class ListarConsultasController implements FacadeController{
 
         colStatus.setCellValueFactory(
                 new PropertyValueFactory<>("status"));
+
+        colObservacao.setCellValueFactory(
+                new PropertyValueFactory<>("observacao"));
 
         colPaciente.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
