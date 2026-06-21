@@ -15,14 +15,17 @@
             text="Cadastrar Consulta"
             onAction="#abrirCadastrarConsulta"/>
 
-    <Button text="Buscar Consulta"/>
+    <Button text="Buscar Consulta"
+            onAction="#abrirBuscarConsulta"/>
 
     <Button text="Listar Consultas"
             onAction="#abrirListarConsultas"/>
 
-    <Button text="Remover Consulta"/>
+    <Button text="Remover Consulta"
+            onAction="#abrirRemoverConsulta"/>
 
-    <Button text="Adicionar Observação"/>
+    <Button text="Adicionar Observação"
+            onAction="#abrirObservacao"/>
 
     <Button text="Sair"
             onAction="#sair"/>

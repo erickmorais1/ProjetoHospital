@@ -4,11 +4,6 @@ import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
 import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
 
 public class MenuMedicoController implements FacadeController {
 
@@ -48,5 +43,35 @@ public class MenuMedicoController implements FacadeController {
                 "/fxml/TelaLogin.fxml",
                 facade
         );
+    }
+
+    @FXML
+    public void abrirBuscarConsulta(ActionEvent event) {
+
+        TrocaTela.trocarTela(
+                event,
+                "/fxml/TelaBuscarConsulta.fxml",
+                facade
+        );
+
+    }
+
+    @FXML
+    public void abrirRemoverConsulta(ActionEvent event) {
+
+        TrocaTela.trocarTela(
+                event,
+                "/fxml/TelaRemoverConsulta.fxml",
+                facade);
+
+    }
+    @FXML
+    public void abrirObservacao(ActionEvent event) {
+
+        TrocaTela.trocarTela(
+                event,
+                "/fxml/TelaObservacaoConsulta.fxml",
+                facade);
+
     }
 }
