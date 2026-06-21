@@ -34,7 +34,7 @@ CREATE TABLE `consulta` (
   KEY `medico_crm` (`medico_crm`),
   CONSTRAINT `consulta_ibfk_1` FOREIGN KEY (`paciente_cpf`) REFERENCES `paciente` (`cpf`),
   CONSTRAINT `consulta_ibfk_2` FOREIGN KEY (`medico_crm`) REFERENCES `medico` (`crm`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,7 +60,7 @@ CREATE TABLE `medico` (
   `valorConsulta` decimal(10,2) NOT NULL,
   PRIMARY KEY (`crm`),
   UNIQUE KEY `cpf` (`cpf`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,7 +87,7 @@ CREATE TABLE `paciente` (
   `prontuario_observacoes` text,
   `prontuario_data` date DEFAULT NULL,
   PRIMARY KEY (`cpf`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
