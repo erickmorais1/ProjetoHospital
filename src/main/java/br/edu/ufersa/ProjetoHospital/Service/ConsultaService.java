@@ -78,4 +78,45 @@ public class ConsultaService {
     public List<Consulta> listarTodasAsConsultas() throws SQLException {
         return consultaDAO.listarTodas();
     }
+
+    public void removerConsulta(int id) throws SQLException {
+
+        consultaDAO.removerConsulta(id);
+
+    }
+
+    public List<Consulta> listarConsultasPorCpf(String cpf)
+            throws SQLException {
+
+        return consultaDAO.listarConsultasPorCpf(cpf);
+
+    }
+
+    public List<Consulta> listarConsultasPorMedico(String crm)
+            throws SQLException {
+
+        return consultaDAO.listarConsultasPorMedico(crm);
+
+    }
+
+    public void adicionarObservacao(int id,
+                                    String observacao)
+            throws SQLException {
+
+        Consulta consulta =
+                consultaDAO.buscarConsultaPorId(id);
+
+        if (consulta == null) {
+            throw new IllegalArgumentException(
+                    "Consulta não encontrada.");
+        }
+
+        consulta.setObservacao(observacao);
+
+        consultaDAO.adicionarObservacao(
+                id,
+                observacao);
+    }
+
+
 }
