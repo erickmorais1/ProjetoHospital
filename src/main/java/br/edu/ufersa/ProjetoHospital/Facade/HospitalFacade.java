@@ -189,6 +189,9 @@ public class HospitalFacade {
                 observacao);
 
     }
-
+    // Metodo salvar paciente
+    public void adicionarPaciente(Paciente p) throws PacienteService.ServicoException {
+        pacienteService.adicionarPaciente(p);
+    }
 
 }
