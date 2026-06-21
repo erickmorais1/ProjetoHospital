@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20"
+      alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="br.edu.ufersa.ProjetoHospital.Controller.ObservacaoConsultaController">
+
+    <Label text="Adicionar Observação"/>
+    <Label fx:id="lblMensagem"/>
+
+    <TextField fx:id="txtId"
+               promptText="ID da consulta"/>
+
+    <TextArea fx:id="txtObservacao"
+              promptText="Digite a observação"/>
+
+    <Button text="Salvar"
+            onAction="#salvarObservacao"/>
+
+    <Button text="Voltar"
+            onAction="#voltar"/>
+
+</VBox>
