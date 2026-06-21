@@ -9,6 +9,7 @@ import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import java.sql.SQLException;
@@ -28,46 +29,48 @@ public class CadastrarConsultaController implements FacadeController {
     private Button btnVoltar;
 
     @FXML
+    private Label lblMensagem;
+
+    @FXML
     private TextField txtCpfPaciente;
 
     @FXML
-    private void cadastrarConsulta() throws PacienteService.ServicoException, SQLException {
-        Paciente paciente =
-                facade.buscarPacientePorCpf(
-                        txtCpfPaciente.getText()
-                );
+    private void cadastrarConsulta() {
 
-        System.out.println(
-                "Paciente encontrado: " +
-                        paciente.getNome()
-        );
-        Endereco endereco = new Endereco();
-        endereco.setRua("Rua do Médico");
+        try {
 
-        Medico medico = new Medico(
-                "João Silva",
-                "11111111111",
-                endereco,
-                "CRM12345",
-                200.0
-        );
+            Paciente paciente =
+                    facade.buscarPacientePorCpf(
+                            txtCpfPaciente.getText()
+                    );
 
-        facade.agendarConsulta(
-                paciente,
-                medico,
-                dpDataConsulta.getValue()
-        );
+            Endereco endereco = new Endereco();
+            endereco.setRua("Rua do Médico");
 
-        System.out.println("Consulta cadastrada com sucesso!");
+            Medico medico = new Medico(
+                    "João Silva",
+                    "11111111111",
+                    endereco,
+                    "CRM12345",
+                    200.0
+            );
 
-        if (facade == null) {
-            System.out.println("Facade NULA");
-        } else {
-            System.out.println("Facade OK");
+            facade.agendarConsulta(
+                    paciente,
+                    medico,
+                    dpDataConsulta.getValue()
+            );
+
+            lblMensagem.setStyle("-fx-text-fill: green;");
+            lblMensagem.setText("Consulta cadastrada com sucesso!");
+
+        } catch (Exception e) {
+
+            lblMensagem.setStyle("-fx-text-fill: red;");
+            lblMensagem.setText("Erro ao cadastrar consulta.");
+
+            e.printStackTrace();
         }
-
-        System.out.println("CPF: " + txtCpfPaciente.getText());
-        System.out.println("Data: " + dpDataConsulta.getValue());
     }
 
 
