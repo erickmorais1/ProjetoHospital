@@ -16,16 +16,18 @@ import javafx.scene.control.TextField;
 import java.time.LocalDate;
 
 public class CadastrarPacienteController implements FacadeController {
-    public TextArea txtObs;
 
     // ── Campos FXML ──────────────────────────────────────────────────────────
+    // CORREÇÃO Bug 2: removido "public TextArea txtObs" sem @FXML que estava
+    // duplicado e causava NullPointerException em txtObservacoes.getText().
+    // Todos os campos agora são @FXML private, nomes idênticos ao fx:id do FXML.
 
     @FXML private TextField txtCpf;
     @FXML private TextField txtNome;
     @FXML private TextField txtRua;
-    @FXML private DatePicker dpData;
-    @FXML private TextArea  txtObservacoes;
-    @FXML private Label     lblMensagem;
+    @FXML private DatePicker dpData;           // CORREÇÃO Bug 3: agora presente no FXML
+    @FXML private TextArea  txtObservacoes;    // CORREÇÃO Bug 2: nome único, alinhado ao FXML
+    @FXML private Label     lblMensagem;       // CORREÇÃO Bug 4: agora presente no FXML
 
     // ── Dependência ──────────────────────────────────────────────────────────
 
@@ -42,8 +44,7 @@ public class CadastrarPacienteController implements FacadeController {
 
     @FXML
     public void initialize() {
-        // Pré-preenche a data com hoje para que o prontuário sempre tenha data
-        dpData.setValue(LocalDate.now());
+        dpData.setValue(LocalDate.now());   // seguro: dpData agora existe no FXML
     }
 
     // ── Handlers ─────────────────────────────────────────────────────────────
@@ -51,7 +52,6 @@ public class CadastrarPacienteController implements FacadeController {
     @FXML
     private void salvarPaciente(ActionEvent event) {
 
-        // 1. Validação dos campos obrigatórios
         String cpf  = txtCpf.getText().trim();
         String nome = txtNome.getText().trim();
 
@@ -65,7 +65,7 @@ public class CadastrarPacienteController implements FacadeController {
             return;
         }
 
-        // 2. Monta Endereco (campo opcional)
+        // Endereço é opcional
         Endereco endereco = null;
         String rua = txtRua.getText().trim();
         if (!rua.isBlank()) {
@@ -73,18 +73,15 @@ public class CadastrarPacienteController implements FacadeController {
             endereco.setRua(rua);
         }
 
-        // 3. Monta Prontuario
-        String obs = txtObservacoes.getText().trim();
+        // Prontuário — observações são opcionais; construtor já define "Sem observações."
         Prontuario prontuario = new Prontuario(dpData.getValue());
+        String obs = txtObservacoes.getText().trim();   // seguro: campo único e @FXML
         if (!obs.isBlank()) {
             prontuario.setObservacoes(obs);
         }
-        // Se obs estiver vazio, o construtor já define "Sem observações."
 
-        // 4. Monta Paciente
         Paciente paciente = new Paciente(nome, endereco, cpf, prontuario);
 
-        // 5. Persiste via Facade
         try {
             facade.adicionarPaciente(paciente);
             sucesso("Paciente cadastrado com sucesso!");
@@ -101,7 +98,7 @@ public class CadastrarPacienteController implements FacadeController {
         TrocaTela.trocarTela(event, "/fxml/TelaPaciente.fxml", facade);
     }
 
-    // ── Helpers privados ─────────────────────────────────────────────────────
+    // ── Helpers ──────────────────────────────────────────────────────────────
 
     private void sucesso(String msg) {
         lblMensagem.setStyle("-fx-text-fill: green;");
@@ -119,5 +116,6 @@ public class CadastrarPacienteController implements FacadeController {
         txtRua.clear();
         txtObservacoes.clear();
         dpData.setValue(LocalDate.now());
+        lblMensagem.setText("");
     }
 }
