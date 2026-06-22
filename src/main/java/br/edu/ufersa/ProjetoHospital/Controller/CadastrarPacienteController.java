@@ -3,60 +3,35 @@ package br.edu.ufersa.ProjetoHospital.Controller;
 import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
 import br.edu.ufersa.ProjetoHospital.Service.PacienteService;
 import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
+import br.edu.ufersa.ProjetoHospital.model.entities.Endereco;
 import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
 import br.edu.ufersa.ProjetoHospital.model.entities.Prontuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
-/**
- * Controller da TelaPaciente.fxml.
- *
- * Permite ao paciente consultar seu próprio prontuário informando o CPF.
- * Implementa {@link FacadeController} para receber o {@link HospitalFacade}
- * injetado pelo utilitário {@link TrocaTela}.
- */
-public class TelaPacienteController implements FacadeController {
+public class CadastrarPacienteController implements FacadeController {
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // Campos FXML
-    // ──────────────────────────────────────────────────────────────────────────
+    // ── Campos FXML ──────────────────────────────────────────────────────────
+    // CORREÇÃO Bug 2: removido "public TextArea txtObs" sem @FXML que estava
+    // duplicado e causava NullPointerException em txtObservacoes.getText().
+    // Todos os campos agora são @FXML private, nomes idênticos ao fx:id do FXML.
 
-    /** Campo de entrada onde o paciente digita o CPF para busca. */
-    @FXML
-    private TextField txtCpfBusca;
+    @FXML private TextField txtCpf;
+    @FXML private TextField txtNome;
+    @FXML private TextField txtRua;
+    @FXML private DatePicker dpData;           // CORREÇÃO Bug 3: agora presente no FXML
+    @FXML private TextArea  txtObservacoes;    // CORREÇÃO Bug 2: nome único, alinhado ao FXML
+    @FXML private Label     lblMensagem;       // CORREÇÃO Bug 4: agora presente no FXML
 
-    /** Painel que exibe os dados do paciente; permanece oculto até a busca. */
-    @FXML
-    private VBox panelDados;
-
-    // — Labels de dados pessoais —
-    @FXML private Label lblNome;
-    @FXML private Label lblCpf;
-    @FXML private Label lblRua;
-
-    // — Labels do prontuário —
-    @FXML private Label lblDataProntuario;
-    @FXML private Label lblObservacoes;
-
-    // ──────────────────────────────────────────────────────────────────────────
-    // Dependências
-    // ──────────────────────────────────────────────────────────────────────────
+    // ── Dependência ──────────────────────────────────────────────────────────
 
     private HospitalFacade facade;
-
-    /** Formato de data exibido na tela: dd/MM/yyyy. */
-    private static final DateTimeFormatter FORMATO_DATA =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-    // ──────────────────────────────────────────────────────────────────────────
-    // FacadeController
-    // ──────────────────────────────────────────────────────────────────────────
 
     @Override
     public void setFacade(HospitalFacade facade) {
@@ -65,115 +40,82 @@ public class TelaPacienteController implements FacadeController {
                 + " recebeu facade: " + (facade != null));
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // Handlers FXML
-    // ──────────────────────────────────────────────────────────────────────────
+    // ── Inicialização FXML ───────────────────────────────────────────────────
 
-    /**
-     * Chamado pelo botão "Acessar Meu Prontuário".
-     * Busca o paciente pelo CPF digitado e exibe os dados no painel.
-     */
     @FXML
-    private void acessarProntuario(ActionEvent event) {
+    public void initialize() {
+        dpData.setValue(LocalDate.now());   // seguro: dpData agora existe no FXML
+    }
 
-        // 1. Validação local do campo antes de ir ao banco
-        String cpf = txtCpfBusca.getText().trim();
-        if (cpf.isBlank()) {
-            mostrarAlerta(Alert.AlertType.WARNING,
-                    "Campo vazio",
-                    "Por favor, informe o seu CPF antes de continuar.");
+    // ── Handlers ─────────────────────────────────────────────────────────────
+
+    @FXML
+    private void salvarPaciente(ActionEvent event) {
+
+        String cpf  = txtCpf.getText().trim();
+        String nome = txtNome.getText().trim();
+
+        if (cpf.isBlank() || nome.isBlank()) {
+            erro("CPF e Nome são obrigatórios.");
             return;
         }
 
+        if (dpData.getValue() == null) {
+            erro("Informe a data de abertura do prontuário.");
+            return;
+        }
+
+        // Endereço é opcional
+        Endereco endereco = null;
+        String rua = txtRua.getText().trim();
+        if (!rua.isBlank()) {
+            endereco = new Endereco();
+            endereco.setRua(rua);
+        }
+
+        // Prontuário — observações são opcionais; construtor já define "Sem observações."
+        Prontuario prontuario = new Prontuario(dpData.getValue());
+        String obs = txtObservacoes.getText().trim();   // seguro: campo único e @FXML
+        if (!obs.isBlank()) {
+            prontuario.setObservacoes(obs);
+        }
+
+        Paciente paciente = new Paciente(nome, endereco, cpf, prontuario);
+
         try {
-            // 2. Busca via Facade → Service → DAO
-            Paciente paciente = facade.buscarPacientePorCpf(cpf);
-
-            if (paciente == null) {
-                // CPF não encontrado no banco
-                panelDados.setVisible(false);
-                mostrarAlerta(Alert.AlertType.INFORMATION,
-                        "Paciente não encontrado",
-                        "Nenhum cadastro foi encontrado para o CPF: " + cpf);
-                return;
-            }
-
-            // 3. Preenche dados pessoais
-            lblNome.setText("Nome: " + nvl(paciente.getNome(), "—"));
-            lblCpf.setText("CPF: " + paciente.getCpf());
-
-            String rua = (paciente.getEndereco() != null
-                    && paciente.getEndereco().getRua() != null)
-                    ? paciente.getEndereco().getRua()
-                    : "Não informado";
-            lblRua.setText("Endereço (Rua): " + rua);
-
-            // 4. Preenche dados do prontuário
-            Prontuario prontuario = paciente.getProntuario();
-            if (prontuario != null) {
-                String dataFormatada = (prontuario.getData() != null)
-                        ? prontuario.getData().format(FORMATO_DATA)
-                        : "Não informada";
-                lblDataProntuario.setText("Data de Abertura: " + dataFormatada);
-                lblObservacoes.setText("Observações: " + prontuario.getObservacoes());
-            } else {
-                lblDataProntuario.setText("Data de Abertura: Não informada");
-                lblObservacoes.setText("Observações: Sem observações.");
-            }
-
-            // 5. Exibe o painel (estava visible="false" no FXML)
-            panelDados.setVisible(true);
-
+            facade.adicionarPaciente(paciente);
+            sucesso("Paciente cadastrado com sucesso!");
+            limparFormulario();
         } catch (PacienteService.ServicoException e) {
-            // Erro de negócio / banco de dados
-            mostrarAlerta(Alert.AlertType.ERROR,
-                    "Erro ao acessar prontuário",
-                    e.getMessage());
+            erro(e.getMessage());
         } catch (IllegalArgumentException e) {
-            // CPF inválido detectado pela camada de serviço
-            mostrarAlerta(Alert.AlertType.WARNING,
-                    "CPF inválido",
-                    e.getMessage());
+            erro("Dados inválidos: " + e.getMessage());
         }
     }
 
-
-    @FXML
-    private void irParaCadastro(ActionEvent event) {
-        TrocaTela.trocarTela(event, "/fxml/TelaCadastrarPaciente.fxml", facade);
-    }
-
-    /**
-     * Chamado pelo botão "Voltar ao Início".
-     * Retorna à tela inicial passando o facade adiante.
-     */
     @FXML
     private void voltar(ActionEvent event) {
-        TrocaTela.trocarTela(
-                event,
-                "/fxml/TelaInicial.fxml",
-                facade
-        );
+        TrocaTela.trocarTela(event, "/fxml/TelaPaciente.fxml", facade);
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // Helpers privados
-    // ──────────────────────────────────────────────────────────────────────────
+    // ── Helpers ──────────────────────────────────────────────────────────────
 
-    /** Exibe um Alert modal com os parâmetros fornecidos. */
-    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensagem);
-        alerta.showAndWait();
+    private void sucesso(String msg) {
+        lblMensagem.setStyle("-fx-text-fill: green;");
+        lblMensagem.setText(msg);
     }
 
-    /**
-     * Retorna {@code valor} se não for nulo, caso contrário retorna
-     * {@code fallback}.  Análogo ao SQL COALESCE / NVL.
-     */
-    private static String nvl(String valor, String fallback) {
-        return (valor != null) ? valor : fallback;
+    private void erro(String msg) {
+        lblMensagem.setStyle("-fx-text-fill: red;");
+        lblMensagem.setText(msg);
+    }
+
+    private void limparFormulario() {
+        txtCpf.clear();
+        txtNome.clear();
+        txtRua.clear();
+        txtObservacoes.clear();
+        dpData.setValue(LocalDate.now());
+        lblMensagem.setText("");
     }
 }
