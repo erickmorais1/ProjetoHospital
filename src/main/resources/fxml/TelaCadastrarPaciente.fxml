@@ -9,24 +9,48 @@
 
     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-    <Label text="Cadastro de Paciente" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <Label text="Cadastro de Paciente"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
     <GridPane hgap="10" vgap="10" alignment="CENTER">
+
         <Label text="Nome:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
         <TextField fx:id="txtNome" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-        <Label text="CPF:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="txtCpf" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label text="CPF:"  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="txtCpf"  GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-        <Label text="Rua:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <TextField fx:id="txtRua" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Rua:"  GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="txtRua"  GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-        <Label text="Observações:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <TextArea fx:id="txtObs" prefHeight="80" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <!--
+            CORREÇÃO Bug 3: DatePicker adicionado.
+            Sem ele, dpData ficava null → NullPointerException no initialize().
+        -->
+        <Label text="Data de Abertura:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <DatePicker fx:id="dpData" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <!--
+            CORREÇÃO Bug 2: fx:id corrigido de "txtObs" para "txtObservacoes",
+            alinhado com o campo @FXML do controller.
+        -->
+        <Label text="Observações:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <TextArea fx:id="txtObservacoes" prefHeight="80"
+                  GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
     </GridPane>
 
+    <!--
+        CORREÇÃO Bug 4: Label de feedback adicionada.
+        Sem ela, lblMensagem ficava null → NullPointerException ao salvar ou dar erro.
+    -->
+    <Label fx:id="lblMensagem" text=""/>
+
     <HBox spacing="15" alignment="CENTER">
-        <Button text="Salvar" onAction="#salvarPaciente" style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
-        <Button text="Voltar" onAction="#voltar" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+        <Button text="Salvar"  onAction="#salvarPaciente"
+                style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
+        <Button text="Voltar"  onAction="#voltar"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
     </HBox>
+
 </VBox>
