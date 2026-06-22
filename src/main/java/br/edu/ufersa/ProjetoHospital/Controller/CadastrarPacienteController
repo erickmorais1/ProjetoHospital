@@ -1,0 +1,123 @@
+package br.edu.ufersa.ProjetoHospital.Controller;
+
+import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
+import br.edu.ufersa.ProjetoHospital.Service.PacienteService;
+import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
+import br.edu.ufersa.ProjetoHospital.model.entities.Endereco;
+import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
+import br.edu.ufersa.ProjetoHospital.model.entities.Prontuario;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+
+import java.time.LocalDate;
+
+public class CadastrarPacienteController implements FacadeController {
+    public TextArea txtObs;
+
+    // ── Campos FXML ──────────────────────────────────────────────────────────
+
+    @FXML private TextField txtCpf;
+    @FXML private TextField txtNome;
+    @FXML private TextField txtRua;
+    @FXML private DatePicker dpData;
+    @FXML private TextArea  txtObservacoes;
+    @FXML private Label     lblMensagem;
+
+    // ── Dependência ──────────────────────────────────────────────────────────
+
+    private HospitalFacade facade;
+
+    @Override
+    public void setFacade(HospitalFacade facade) {
+        this.facade = facade;
+        System.out.println(getClass().getSimpleName()
+                + " recebeu facade: " + (facade != null));
+    }
+
+    // ── Inicialização FXML ───────────────────────────────────────────────────
+
+    @FXML
+    public void initialize() {
+        // Pré-preenche a data com hoje para que o prontuário sempre tenha data
+        dpData.setValue(LocalDate.now());
+    }
+
+    // ── Handlers ─────────────────────────────────────────────────────────────
+
+    @FXML
+    private void salvarPaciente(ActionEvent event) {
+
+        // 1. Validação dos campos obrigatórios
+        String cpf  = txtCpf.getText().trim();
+        String nome = txtNome.getText().trim();
+
+        if (cpf.isBlank() || nome.isBlank()) {
+            erro("CPF e Nome são obrigatórios.");
+            return;
+        }
+
+        if (dpData.getValue() == null) {
+            erro("Informe a data de abertura do prontuário.");
+            return;
+        }
+
+        // 2. Monta Endereco (campo opcional)
+        Endereco endereco = null;
+        String rua = txtRua.getText().trim();
+        if (!rua.isBlank()) {
+            endereco = new Endereco();
+            endereco.setRua(rua);
+        }
+
+        // 3. Monta Prontuario
+        String obs = txtObservacoes.getText().trim();
+        Prontuario prontuario = new Prontuario(dpData.getValue());
+        if (!obs.isBlank()) {
+            prontuario.setObservacoes(obs);
+        }
+        // Se obs estiver vazio, o construtor já define "Sem observações."
+
+        // 4. Monta Paciente
+        Paciente paciente = new Paciente(nome, endereco, cpf, prontuario);
+
+        // 5. Persiste via Facade
+        try {
+            facade.adicionarPaciente(paciente);
+            sucesso("Paciente cadastrado com sucesso!");
+            limparFormulario();
+        } catch (PacienteService.ServicoException e) {
+            erro(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            erro("Dados inválidos: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void voltar(ActionEvent event) {
+        TrocaTela.trocarTela(event, "/fxml/TelaPaciente.fxml", facade);
+    }
+
+    // ── Helpers privados ─────────────────────────────────────────────────────
+
+    private void sucesso(String msg) {
+        lblMensagem.setStyle("-fx-text-fill: green;");
+        lblMensagem.setText(msg);
+    }
+
+    private void erro(String msg) {
+        lblMensagem.setStyle("-fx-text-fill: red;");
+        lblMensagem.setText(msg);
+    }
+
+    private void limparFormulario() {
+        txtCpf.clear();
+        txtNome.clear();
+        txtRua.clear();
+        txtObservacoes.clear();
+        dpData.setValue(LocalDate.now());
+    }
+}
