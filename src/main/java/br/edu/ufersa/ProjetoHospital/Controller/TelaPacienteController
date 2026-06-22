@@ -137,6 +137,12 @@ public class TelaPacienteController implements FacadeController {
         }
     }
 
+
+    @FXML
+    private void irParaCadastro(ActionEvent event) {
+        TrocaTela.trocarTela(event, "/fxml/TelaCadastrarPaciente.fxml", facade);
+    }
+
     /**
      * Chamado pelo botão "Voltar ao Início".
      * Retorna à tela inicial passando o facade adiante.
