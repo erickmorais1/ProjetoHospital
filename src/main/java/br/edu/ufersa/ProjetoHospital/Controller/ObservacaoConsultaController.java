@@ -34,9 +34,7 @@ public class ObservacaoConsultaController
 
             int id = Integer.parseInt(txtId.getText());
 
-            facade.adicionarObservacao(
-                    id,
-                    txtObservacao.getText());
+            facade.adicionarObservacao(id, txtObservacao.getText());
 
             lblMensagem.setStyle("-fx-text-fill: green;");
             lblMensagem.setText("Observação adicionada com sucesso!");

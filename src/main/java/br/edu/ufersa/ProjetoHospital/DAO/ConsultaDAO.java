@@ -157,7 +157,11 @@ WHERE c.medico_crm = ?
 
         ps.setInt(1, id);
 
-        ps.executeUpdate();
+        int linhasAfetadas = ps.executeUpdate();
+
+        if (linhasAfetadas == 0) {
+            throw new SQLException("Consulta não encontrada.");
+        }
     }
 
     public List<Consulta> listarConsultasPorCpf(String cpf) throws SQLException {

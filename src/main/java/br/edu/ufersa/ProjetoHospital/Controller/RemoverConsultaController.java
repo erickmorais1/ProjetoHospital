@@ -38,7 +38,6 @@ public class RemoverConsultaController implements FacadeController {
 
             lblMensagem.setStyle("-fx-text-fill: red;");
             lblMensagem.setText("Erro ao remover consulta.");
-
         }
     }
 
