@@ -1,7 +1,9 @@
 package br.edu.ufersa.ProjetoHospital.Controller;
 
 import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
+import br.edu.ufersa.ProjetoHospital.Util.SessaoGerente;
 import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
+import br.edu.ufersa.ProjetoHospital.model.entities.Gerente;
 import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,8 +11,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -119,10 +125,11 @@ public class ListarMedicosController implements FacadeController {
 
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             try {
-                // Implementar remoção através do DAO
                 System.out.println("Removendo médico: " + selecionado.getCrm());
-                // TODO: Adicionar método na facade para remover médico
-                // facade.removerMedico(selecionado);
+
+                Gerente gerente = SessaoGerente.getGerenteLogado();
+
+                facade.removerMedico(gerente, selecionado.getCrm());
 
                 mostrarAlerta("Sucesso", "Médico removido com sucesso!",
                         Alert.AlertType.INFORMATION);
@@ -146,10 +153,29 @@ public class ListarMedicosController implements FacadeController {
             return;
         }
 
-        System.out.println("Atualizando médico: " + selecionado.getNome());
-        // TODO: Implementar tela de atualização de médico
-        mostrarAlerta("Info", "Funcionalidade de atualização em desenvolvimento.",
-                Alert.AlertType.INFORMATION);
+        System.out.println("Abrindo edição do médico: " + selecionado.getNome());
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/TelaCadastrarMedico.fxml"));
+
+            Scene scene = new Scene(loader.load());
+
+            CadastrarMedicoController controller = loader.getController();
+            controller.setFacade(facade);
+            controller.carregarMedicoParaEdicao(selecionado);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            boolean telaCheia = stage.isFullScreen();
+
+            stage.setScene(scene);
+            stage.setFullScreen(telaCheia);
+
+        } catch (Exception e) {
+            mostrarAlerta("Erro", "Erro ao abrir tela de edição: " + e.getMessage(),
+                    Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
     }
 
     @FXML

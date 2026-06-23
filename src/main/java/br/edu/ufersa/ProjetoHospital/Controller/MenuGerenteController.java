@@ -5,10 +5,8 @@ import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-/**
- * Controller para o menu principal do gerente
- * O gerente tem permissão para gerenciar apenas médicos (ADD, listar, buscar, remover)
- */
+// Controller para o menu principal do gerente.
+// O gerente tem permissão para gerenciar apenas médicos (cadastrar, listar, buscar, remover, atualizar)
 public class MenuGerenteController implements FacadeController {
 
     private HospitalFacade facade;
@@ -26,14 +24,6 @@ public class MenuGerenteController implements FacadeController {
         System.out.println("Abrindo lista de médicos");
         TrocaTela.trocarTela(event,
                 "/fxml/TelaListarMedicos.fxml",
-                facade);
-    }
-
-    @FXML
-    public void abrirEditarPerfil(ActionEvent event) {
-        System.out.println("Abrindo edição de perfil");
-        TrocaTela.trocarTela(event,
-                "/fxml/TelaEditarPerfilGerente.fxml",
                 facade);
     }
 

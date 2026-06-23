@@ -7,13 +7,10 @@ import br.edu.ufersa.ProjetoHospital.model.entities.Gerente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-/**
- * Controller para edição de perfil do gerente
- * Permite editar dados pessoais e endereço, além de alterar a senha
- */
+// Controller para edição de perfil do gerente.
+// Permite editar dados pessoais e endereço
 public class EditarPerfilGerenteController implements FacadeController {
 
     @FXML
@@ -40,15 +37,6 @@ public class EditarPerfilGerenteController implements FacadeController {
     @FXML
     private TextField txtComplemento;
 
-    @FXML
-    private PasswordField txtSenhaAtual;
-
-    @FXML
-    private PasswordField txtNovaSenha;
-
-    @FXML
-    private PasswordField txtConfirmarSenha;
-
     private HospitalFacade facade;
     private Gerente gerenteAtual;
 
@@ -65,22 +53,11 @@ public class EditarPerfilGerenteController implements FacadeController {
         txtCpf.setEditable(false);
     }
 
-    /**
-     * Carrega os dados do gerente atual
-     */
+    // Carrega os dados do gerente atual
     private void carregarDadosGerente() {
         System.out.println("Carregando dados do gerente...");
 
-        // TODO: Implementar obtenção do gerente da sessão/autenticação
-        // gerenteAtual = facade.obterGerenteAtual();
-
-        // Dados de exemplo (remover quando implementar sessão real)
-        gerenteAtual = new Gerente(
-                "João Gerente",
-                "12345678900",
-                new Endereco(),
-                "ADMIN001"
-        );
+        gerenteAtual = facade.obterGerenteAtual();
 
         if (gerenteAtual != null) {
             preencherCampos();
@@ -90,9 +67,7 @@ public class EditarPerfilGerenteController implements FacadeController {
         }
     }
 
-    /**
-     * Preenche os campos com os dados do gerente
-     */
+    // Preenche os campos com os dados do gerente
     private void preencherCampos() {
         txtNome.setText(gerenteAtual.getNome() != null ? gerenteAtual.getNome() : "");
         txtCpf.setText(gerenteAtual.getCpf() != null ? gerenteAtual.getCpf() : "");
@@ -113,9 +88,7 @@ public class EditarPerfilGerenteController implements FacadeController {
         System.out.println("Campos preenchidos com sucesso");
     }
 
-    /**
-     * Salva as alterações de perfil
-     */
+    // Salva as alterações de perfil
     @FXML
     private void salvarAlteracoes() {
         try {
@@ -151,8 +124,7 @@ public class EditarPerfilGerenteController implements FacadeController {
 
             gerenteAtual.setEndereco(endereco);
 
-            // TODO: Atualizar gerente no banco de dados através da facade
-            // facade.atualizarGerente(gerenteAtual);
+            facade.atualizarGerente(gerenteAtual);
 
             System.out.println("Alterações salvas com sucesso");
 
@@ -168,74 +140,20 @@ public class EditarPerfilGerenteController implements FacadeController {
         }
     }
 
-    /**
-     * Altera a senha do gerente
-     */
-    @FXML
-    private void alterarSenha() {
-        try {
-            String senhaAtual = txtSenhaAtual.getText();
-            String novaSenha = txtNovaSenha.getText();
-            String confirmarSenha = txtConfirmarSenha.getText();
-
-            if (senhaAtual.isBlank() || novaSenha.isBlank() || confirmarSenha.isBlank()) {
-                mostrarAlerta("Erro",
-                        "Por favor, preencha todos os campos de senha.",
-                        Alert.AlertType.WARNING);
-                return;
-            }
-
-            if (!novaSenha.equals(confirmarSenha)) {
-                mostrarAlerta("Erro",
-                        "A nova senha e a confirmação não correspondem.",
-                        Alert.AlertType.ERROR);
-                return;
-            }
-
-            if (novaSenha.length() < 6) {
-                mostrarAlerta("Erro",
-                        "A nova senha deve ter pelo menos 6 caracteres.",
-                        Alert.AlertType.WARNING);
-                return;
-            }
-
-            // TODO: Validar senha atual e atualizar no banco de dados
-            // facade.alterarSenha(gerenteAtual.getCpf(), senhaAtual, novaSenha);
-
-            mostrarAlerta("Sucesso",
-                    "Senha alterada com sucesso!",
-                    Alert.AlertType.INFORMATION);
-
-            // Limpar campos de senha
-            txtSenhaAtual.clear();
-            txtNovaSenha.clear();
-            txtConfirmarSenha.clear();
-
-        } catch (Exception e) {
-            mostrarAlerta("Erro",
-                    "Erro ao alterar senha: " + e.getMessage(),
-                    Alert.AlertType.ERROR);
-        }
-    }
-
     @FXML
     public void cancelar(ActionEvent event) {
         System.out.println("Cancelando edição de perfil");
         TrocaTela.trocarTela(event, "/fxml/TelaMenuGerente.fxml", facade);
     }
 
-    /**
-     * Valida campos obrigatórios
-     */
+    // Valida campos obrigatórios
     private boolean validarCamposObrigatorios() {
         return !txtNome.getText().isBlank() &&
                 !txtRua.getText().isBlank() &&
                 !txtCidade.getText().isBlank();
     }
 
-    /**
-     * Exibe alerta ao usuário
-     */
+    // Exibe alerta ao usuário
     private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);

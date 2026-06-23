@@ -37,6 +37,13 @@ public class LoginController implements FacadeController{
                     facade
             );
 
+        } else if (usuario.equals("gerente") && senha.equals("123")) {
+            System.out.println("Gerente logado");
+            TrocaTela.trocarTela(
+                    event,
+                    "/fxml/TelaMenuGerente.fxml",
+                    facade
+            );
         } else {
 
             System.out.println("Usuário ou senha inválidos.");

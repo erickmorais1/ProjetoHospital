@@ -32,6 +32,16 @@ public class MedicoService {
         medicoDAO.excluirMedicoPorCrm(crm);
     }
 
+    public void atualizarMedico(Gerente gerente, Medico medico) throws SQLException {
+        if (gerente == null) {
+            throw new IllegalStateException("Somente o gerente pode atualizar um médico");
+        }
+        if (medico == null || medico.getCrm() == null) {
+            throw new IllegalArgumentException("Médico inválido");
+        }
+        medicoDAO.atualizarMedico(medico);
+    }
+
     public List<Medico> listarMedicos() throws SQLException {
         return medicoDAO.listarMedicos();
     }
