@@ -9,6 +9,7 @@ public class Consulta {
     private Medico medico;
     private LocalDate diaHora;
     private String status;
+    private String observacao;
 
     public Consulta(int id, Paciente paciente, Medico medico, LocalDate diaHora) {
         setId(id);
@@ -47,6 +48,15 @@ public class Consulta {
             this.diaHora = diaHora;
         }
     }
+    public void setObservacao(String observacao) {
+
+        if(observacao != null){
+
+            this.observacao = observacao;
+
+        }
+
+    }
 
 
     // REGRAS DE NEGÓCIO
@@ -78,6 +88,7 @@ public class Consulta {
     public Medico getMedico() { return medico; }
     public LocalDate getDiaHora() { return diaHora; }
     public String getStatus() { return status; }
+    public String getObservacao() {return observacao;}
 
     @Override
     public String toString() {

@@ -9,6 +9,7 @@ import br.edu.ufersa.ProjetoHospital.model.entities.Consulta;
 import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
 import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
 
+
 public class ConsultaDAO {
     private Connection con;
 
@@ -48,7 +49,15 @@ public class ConsultaDAO {
     }
 
     public Consulta buscarConsultaPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM consulta WHERE id = ?";
+        String sql = """
+SELECT c.*,
+       p.nome AS nomePaciente,
+       m.nome AS nomeMedico
+FROM consulta c
+JOIN paciente p ON c.paciente_cpf = p.cpf
+JOIN medico m ON c.medico_crm = m.crm
+WHERE c.id = ?
+""";
 
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -66,7 +75,15 @@ public class ConsultaDAO {
 
     public List<Consulta> listarConsultasPorMedico(String crm) throws SQLException {
         List<Consulta> lista = new ArrayList<>();
-        String sql = "SELECT * FROM consulta WHERE medico_crm = ?";
+        String sql = """
+SELECT c.*,
+       p.nome AS nomePaciente,
+       m.nome AS nomeMedico
+FROM consulta c
+JOIN paciente p ON c.paciente_cpf = p.cpf
+JOIN medico m ON c.medico_crm = m.crm
+WHERE c.medico_crm = ?
+""";
 
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -115,19 +132,79 @@ public class ConsultaDAO {
         medico.setCrm(rs.getString("medico_crm"));
         medico.setNome(rs.getString("nomeMedico"));
 
-        paciente.setNome(rs.getString("nomePaciente"));
-        medico.setNome(rs.getString("nomeMedico"));
-
         LocalDate data = rs.getDate("diaHora").toLocalDate();
         int id = rs.getInt("id");
 
         Consulta consulta = new Consulta(id, paciente, medico, data);
 
         String statusBanco = rs.getString("status");
+        System.out.println("Status vindo do banco: " + statusBanco);
+
         if (!statusBanco.equals("Agendada")) {
             consulta.mudarStatus(statusBanco);
         }
+        consulta.setObservacao(
+                rs.getString("observacao"));
 
         return consulta;
     }
+
+    public void removerConsulta(int id) throws SQLException {
+
+        String sql = "DELETE FROM consulta WHERE id = ?";
+
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        ps.setInt(1, id);
+
+        int linhasAfetadas = ps.executeUpdate();
+
+        if (linhasAfetadas == 0) {
+            throw new SQLException("Consulta não encontrada.");
+        }
+    }
+
+    public List<Consulta> listarConsultasPorCpf(String cpf) throws SQLException {
+
+        List<Consulta> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT c.*,
+               p.nome AS nomePaciente,
+               m.nome AS nomeMedico
+        FROM consulta c
+        JOIN paciente p ON c.paciente_cpf = p.cpf
+        JOIN medico m ON c.medico_crm = m.crm
+        WHERE p.cpf = ?
+        """;
+
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        ps.setString(1, cpf);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            lista.add(mapearResultSetParaConsulta(rs));
+        }
+
+        return lista;
+    }
+    public void adicionarObservacao(int id, String observacao)
+            throws SQLException {
+
+        String sql = """
+            UPDATE consulta
+            SET observacao = ?
+            WHERE id = ?
+            """;
+
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        ps.setString(1, observacao);
+        ps.setInt(2, id);
+
+        ps.executeUpdate();
+    }
+
 }

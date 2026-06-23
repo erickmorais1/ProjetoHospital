@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="br.edu.ufersa.ProjetoHospital.Controller.RemoverConsultaController"
+      alignment="CENTER"
+      spacing="20">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Remover Consulta"/>
+    <Label fx:id="lblMensagem"/>
+
+    <TextField fx:id="txtId"
+               promptText="ID da consulta"/>
+
+    <Button text="Remover"
+            onAction="#removerConsulta"/>
+
+    <Button text="Voltar"
+            onAction="#voltar"/>
+
+</VBox>
