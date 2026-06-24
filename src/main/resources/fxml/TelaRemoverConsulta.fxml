@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.edu.ufersa.ProjetoHospital.Controller.RemoverConsultaController">
+   <top>
+      <VBox prefHeight="80.0" prefWidth="800.0" style="-fx-background-color: #2E86AB;" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="REMOVER CONSULTA" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" top="15.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="Informe o ID da consulta que deseja remover" textFill="#E0E0E0">
+               <font>
+                  <Font size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane hgap="10.0" vgap="10.0" alignment="CENTER">
+               <columnConstraints>
+                  <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="30.0" />
+                  <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="70.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="ID da Consulta:" />
+                  <TextField fx:id="txtId" promptText="ID da consulta"
+                             GridPane.columnIndex="1" style="-fx-font-size: 13;" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+               </padding>
+            </GridPane>
+            <Label fx:id="lblMensagem" text="" style="-fx-font-size: 13;" />
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </VBox>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 20;" BorderPane.alignment="CENTER">
+         <children>
+            <Button minWidth="100.0" onAction="#removerConsulta"
+                    style="-fx-padding: 10; -fx-font-size: 12;"
+                    text="Remover" />
+            <Button minWidth="100.0" onAction="#voltar"
+                    style="-fx-padding: 10; -fx-font-size: 12;"
+                    text="Voltar" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>
