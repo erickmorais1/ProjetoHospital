@@ -11,7 +11,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,35 +19,16 @@ public class BuscarConsultaController implements FacadeController {
 
     private HospitalFacade facade;
 
-    @FXML
-    private TextField txtId;
-
-    @FXML
-    private TableColumn<Consulta, String> colObservacao;
-
-    @FXML
-    private TextField txtCpf;
-
-    @FXML
-    private TextField txtCrm;
-
-    @FXML
-    private TableView<Consulta> tabelaConsultas;
-
-    @FXML
-    private TableColumn<Consulta, Integer> colId;
-
-    @FXML
-    private TableColumn<Consulta, String> colPaciente;
-
-    @FXML
-    private TableColumn<Consulta, String> colMedico;
-
-    @FXML
-    private TableColumn<Consulta, LocalDate> colData;
-
-    @FXML
-    private TableColumn<Consulta, String> colStatus;
+    @FXML private TextField txtId;
+    @FXML private TextField txtCpf;
+    @FXML private TextField txtCrm;
+    @FXML private TableView<Consulta> tabelaConsultas;
+    @FXML private TableColumn<Consulta, Integer> colId;
+    @FXML private TableColumn<Consulta, String> colPaciente;
+    @FXML private TableColumn<Consulta, String> colMedico;
+    @FXML private TableColumn<Consulta, LocalDate> colData;
+    @FXML private TableColumn<Consulta, String> colStatus;
+    @FXML private TableColumn<Consulta, String> colObservacao;
 
     @Override
     public void setFacade(HospitalFacade facade) {
@@ -57,61 +37,33 @@ public class BuscarConsultaController implements FacadeController {
 
     @FXML
     public void initialize() {
-
-        colId.setCellValueFactory(
-                new PropertyValueFactory<>("id"));
-
-        colData.setCellValueFactory(
-                new PropertyValueFactory<>("diaHora"));
-
-        colStatus.setCellValueFactory(
-                new PropertyValueFactory<>("status"));
-
-        colObservacao.setCellValueFactory(
-                new PropertyValueFactory<>("observacao"));
-
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colData.setCellValueFactory(new PropertyValueFactory<>("diaHora"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colObservacao.setCellValueFactory(new PropertyValueFactory<>("observacao"));
         colPaciente.setCellValueFactory(cellData -> {
             Consulta c = cellData.getValue();
-
-            if (c != null && c.getPaciente() != null) {
+            if (c != null && c.getPaciente() != null)
                 return new SimpleStringProperty(c.getPaciente().getNome());
-            }
-
             return new SimpleStringProperty("");
         });
-
         colMedico.setCellValueFactory(cellData -> {
             Consulta c = cellData.getValue();
-
-            if (c != null && c.getMedico() != null) {
+            if (c != null && c.getMedico() != null)
                 return new SimpleStringProperty(c.getMedico().getNome());
-            }
-
             return new SimpleStringProperty("");
         });
     }
 
     @FXML
     public void buscarPorId() {
-
         try {
-
             int id = Integer.parseInt(txtId.getText());
-
             Consulta consulta = facade.buscarConsulta(id);
-            if (consulta != null) {
-                System.out.println(consulta.getPaciente());
-                System.out.println(consulta.getMedico());
-            }
-
-            if (consulta != null) {
-                tabelaConsultas.setItems(
-                        FXCollections.observableArrayList(consulta));
-            } else {
+            if (consulta != null)
+                tabelaConsultas.setItems(FXCollections.observableArrayList(consulta));
+            else
                 tabelaConsultas.getItems().clear();
-                System.out.println("Consulta não encontrada.");
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -119,15 +71,9 @@ public class BuscarConsultaController implements FacadeController {
 
     @FXML
     public void buscarPorCpf() {
-
         try {
-
-            List<Consulta> consultas =
-                    facade.listarConsultasPorCpf(txtCpf.getText());
-
-            tabelaConsultas.setItems(
-                    FXCollections.observableArrayList(consultas));
-
+            List<Consulta> consultas = facade.listarConsultasPorCpf(txtCpf.getText());
+            tabelaConsultas.setItems(FXCollections.observableArrayList(consultas));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -135,15 +81,9 @@ public class BuscarConsultaController implements FacadeController {
 
     @FXML
     public void buscarPorMedico() {
-
         try {
-
-            List<Consulta> consultas =
-                    facade.listarConsultasPorMedico(txtCrm.getText());
-
-            tabelaConsultas.setItems(
-                    FXCollections.observableArrayList(consultas));
-
+            List<Consulta> consultas = facade.listarConsultasPorMedico(txtCrm.getText());
+            tabelaConsultas.setItems(FXCollections.observableArrayList(consultas));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -151,11 +91,6 @@ public class BuscarConsultaController implements FacadeController {
 
     @FXML
     public void voltar(ActionEvent event) {
-
-        TrocaTela.trocarTela(
-                event,
-                "/fxml/TelaMenuMedico.fxml",
-                facade);
-
+        TrocaTela.trocarTela(event, "/fxml/TelaMenuMedico.fxml", facade);
     }
 }

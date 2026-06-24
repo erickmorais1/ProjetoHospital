@@ -1,47 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="br.edu.ufersa.ProjetoHospital.Controller.TelaPacienteController"
-      alignment="CENTER"
-      spacing="15"
-      style="-fx-background-color: #f8f9fa;">
-
-    <padding>
-        <Insets top="30" right="30" bottom="30" left="30"/>
-    </padding>
-
-    <Label text="Área do Paciente"
-           style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-
-    <HBox alignment="CENTER" spacing="10">
-        <TextField fx:id="txtCpfBusca" promptText="Digite o seu CPF"/>
-        <Button text="Acessar Meu Prontuário" onAction="#acessarProntuario"/>
-    </HBox>
-
-    <VBox fx:id="panelDados" spacing="10" alignment="CENTER_LEFT" visible="false"
-          style="-fx-border-color: #ced4da; -fx-border-radius: 5;
-                 -fx-padding: 15; -fx-background-color: white;">
-
-        <Label text="Dados Pessoais"
-               style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-        <Label fx:id="lblNome"  text="Nome: "/>
-        <Label fx:id="lblCpf"   text="CPF: "/>
-        <Label fx:id="lblRua"   text="Endereço (Rua): "/>
-
-        <Separator/>
-
-        <Label text="Informações do Prontuário"
-               style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-        <Label fx:id="lblDataProntuario" text="Data de Abertura: "/>
-        <Label fx:id="lblObservacoes"    text="Observações: " wrapText="true"/>
-    </VBox>
-
-    <HBox alignment="CENTER" spacing="10">
-        <Button text="Cadastrar Paciente" onAction="#irParaCadastro"/>
-        <Button text="Voltar ao Início"   onAction="#voltar"/>
-    </HBox>
-
-</VBox>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.edu.ufersa.ProjetoHospital.Controller.TelaPacienteController">
+   <top>
+      <VBox prefHeight="100.0" prefWidth="800.0" style="-fx-background-color: #2E86AB;" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="SISTEMA HOSPITALAR - ÁREA DO PACIENTE" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="Consulte seu prontuário" textFill="#E0E0E0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="15.0" left="20.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <VBox alignment="TOP_CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <TextField fx:id="txtCpfBusca" promptText="Digite o seu CPF"
+                             prefWidth="280.0" style="-fx-font-size: 13;" />
+                  <Button onAction="#acessarProntuario"
+                          style="-fx-padding: 10; -fx-font-size: 13;"
+                          text="Acessar Meu Prontuário" />
+               </children>
+            </HBox>
+            <VBox fx:id="panelDados" spacing="10.0" alignment="CENTER_LEFT" visible="false"
+                  style="-fx-border-color: #ced4da; -fx-padding: 20; -fx-background-color: white;">
+               <children>
+                  <Label text="Dados Pessoais">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblNome" text="Nome: " />
+                  <Label fx:id="lblCpf" text="CPF: " />
+                  <Label fx:id="lblRua" text="Endereço (Rua): " />
+                  <Separator />
+                  <Label text="Informações do Prontuário">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblDataProntuario" text="Data de Abertura: " />
+                  <Label fx:id="lblObservacoes" text="Observações: " wrapText="true" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </VBox>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 20;" BorderPane.alignment="CENTER">
+         <children>
+            <Button minWidth="140.0" onAction="#irParaCadastro"
+                    style="-fx-padding: 10; -fx-font-size: 12;"
+                    text="Cadastrar Paciente" />
+            <Button minWidth="120.0" onAction="#voltar"
+                    style="-fx-padding: 10; -fx-font-size: 12;"
+                    text="Voltar ao Início" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

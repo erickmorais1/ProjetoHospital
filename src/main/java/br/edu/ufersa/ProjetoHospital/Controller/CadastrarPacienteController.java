@@ -8,6 +8,7 @@ import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
 import br.edu.ufersa.ProjetoHospital.model.entities.Prontuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -17,55 +18,43 @@ import java.time.LocalDate;
 
 public class CadastrarPacienteController implements FacadeController {
 
-    // ── Campos FXML ──────────────────────────────────────────────────────────
-    // CORREÇÃO Bug 2: removido "public TextArea txtObs" sem @FXML que estava
-    // duplicado e causava NullPointerException em txtObservacoes.getText().
-    // Todos os campos agora são @FXML private, nomes idênticos ao fx:id do FXML.
-
     @FXML private TextField txtCpf;
     @FXML private TextField txtNome;
     @FXML private TextField txtRua;
-    @FXML private DatePicker dpData;           // CORREÇÃO Bug 3: agora presente no FXML
-    @FXML private TextArea  txtObservacoes;    // CORREÇÃO Bug 2: nome único, alinhado ao FXML
-    @FXML private Label     lblMensagem;       // CORREÇÃO Bug 4: agora presente no FXML
-
-    // ── Dependência ──────────────────────────────────────────────────────────
+    @FXML private DatePicker dpData;
+    @FXML private TextArea  txtObservacoes;
+    @FXML private Label     lblMensagem;
 
     private HospitalFacade facade;
 
     @Override
     public void setFacade(HospitalFacade facade) {
         this.facade = facade;
-        System.out.println(getClass().getSimpleName()
-                + " recebeu facade: " + (facade != null));
+        System.out.println(getClass().getSimpleName() + " recebeu facade: " + (facade != null));
     }
-
-    // ── Inicialização FXML ───────────────────────────────────────────────────
 
     @FXML
     public void initialize() {
-        dpData.setValue(LocalDate.now());   // seguro: dpData agora existe no FXML
+        dpData.setValue(LocalDate.now());
     }
-
-    // ── Handlers ─────────────────────────────────────────────────────────────
 
     @FXML
     private void salvarPaciente(ActionEvent event) {
-
         String cpf  = txtCpf.getText().trim();
         String nome = txtNome.getText().trim();
 
         if (cpf.isBlank() || nome.isBlank()) {
             erro("CPF e Nome são obrigatórios.");
+            mostrarAlerta(Alert.AlertType.WARNING, "Campos obrigatórios", "CPF e Nome são obrigatórios.");
             return;
         }
 
         if (dpData.getValue() == null) {
             erro("Informe a data de abertura do prontuário.");
+            mostrarAlerta(Alert.AlertType.WARNING, "Campo obrigatório", "Informe a data de abertura do prontuário.");
             return;
         }
 
-        // Endereço é opcional
         Endereco endereco = null;
         String rua = txtRua.getText().trim();
         if (!rua.isBlank()) {
@@ -73,9 +62,8 @@ public class CadastrarPacienteController implements FacadeController {
             endereco.setRua(rua);
         }
 
-        // Prontuário — observações são opcionais; construtor já define "Sem observações."
         Prontuario prontuario = new Prontuario(dpData.getValue());
-        String obs = txtObservacoes.getText().trim();   // seguro: campo único e @FXML
+        String obs = txtObservacoes.getText().trim();
         if (!obs.isBlank()) {
             prontuario.setObservacoes(obs);
         }
@@ -85,11 +73,14 @@ public class CadastrarPacienteController implements FacadeController {
         try {
             facade.adicionarPaciente(paciente);
             sucesso("Paciente cadastrado com sucesso!");
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Paciente cadastrado com sucesso!");
             limparFormulario();
         } catch (PacienteService.ServicoException e) {
             erro(e.getMessage());
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro ao cadastrar", e.getMessage());
         } catch (IllegalArgumentException e) {
             erro("Dados inválidos: " + e.getMessage());
+            mostrarAlerta(Alert.AlertType.WARNING, "Dados inválidos", e.getMessage());
         }
     }
 
@@ -97,8 +88,6 @@ public class CadastrarPacienteController implements FacadeController {
     private void voltar(ActionEvent event) {
         TrocaTela.trocarTela(event, "/fxml/TelaPaciente.fxml", facade);
     }
-
-    // ── Helpers ──────────────────────────────────────────────────────────────
 
     private void sucesso(String msg) {
         lblMensagem.setStyle("-fx-text-fill: green;");
@@ -117,5 +106,13 @@ public class CadastrarPacienteController implements FacadeController {
         txtObservacoes.clear();
         dpData.setValue(LocalDate.now());
         lblMensagem.setText("");
+    }
+
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensagem);
+        alerta.showAndWait();
     }
 }

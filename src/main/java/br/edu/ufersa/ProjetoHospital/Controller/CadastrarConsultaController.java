@@ -1,19 +1,18 @@
 package br.edu.ufersa.ProjetoHospital.Controller;
 
 import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
-import br.edu.ufersa.ProjetoHospital.Service.PacienteService;
 import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
 import br.edu.ufersa.ProjetoHospital.model.entities.Endereco;
 import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
 import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import java.sql.SQLException;
-
 
 public class CadastrarConsultaController implements FacadeController {
 
@@ -36,13 +35,8 @@ public class CadastrarConsultaController implements FacadeController {
 
     @FXML
     private void cadastrarConsulta() {
-
         try {
-
-            Paciente paciente =
-                    facade.buscarPacientePorCpf(
-                            txtCpfPaciente.getText()
-                    );
+            Paciente paciente = facade.buscarPacientePorCpf(txtCpfPaciente.getText());
 
             Endereco endereco = new Endereco();
             endereco.setRua("Rua do Médico");
@@ -55,35 +49,40 @@ public class CadastrarConsultaController implements FacadeController {
                     200.0
             );
 
-            facade.agendarConsulta(
-                    paciente,
-                    medico,
-                    dpDataConsulta.getValue()
-            );
+            facade.agendarConsulta(paciente, medico, dpDataConsulta.getValue());
 
             lblMensagem.setStyle("-fx-text-fill: green;");
             lblMensagem.setText("Consulta cadastrada com sucesso!");
 
-        } catch (Exception e) {
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Consulta cadastrada com sucesso!");
 
+        } catch (Exception e) {
             lblMensagem.setStyle("-fx-text-fill: red;");
             lblMensagem.setText("Erro ao cadastrar consulta.");
+
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível cadastrar a consulta.");
 
             e.printStackTrace();
         }
     }
 
-
+    @Override
     public void setFacade(HospitalFacade facade) {
         this.facade = facade;
-        System.out.println(getClass().getSimpleName()
-                + " recebeu facade: " + (facade != null));
+        System.out.println(getClass().getSimpleName() + " recebeu facade: " + (facade != null));
     }
-
 
     @FXML
     public void Voltar(ActionEvent event) {
         System.out.println("Facade é null? " + (facade == null));
-        TrocaTela.trocarTela(event, "/fxml/TelaMenuMedico.fxml",facade);
+        TrocaTela.trocarTela(event, "/fxml/TelaMenuMedico.fxml", facade);
+    }
+
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensagem);
+        alerta.showAndWait();
     }
 }
