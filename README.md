@@ -47,9 +47,12 @@ src
       │         ├── Controller
       │         ├── DAO
       │         ├── Facade
+      │         ├── Factory
       │         ├── Service
+      │         ├── Strategy
       │         ├── Util
       │         ├── model
+      │         │    └── entities
       │         └── App.java
       │
       └── resources
@@ -68,7 +71,7 @@ O sistema foi estruturado seguindo o padrão de arquitetura em camadas:
   * *Exemplos:* `ConsultaService`, `MedicoService`, `PacienteService`
 * **DAO (Data Access Object):** Camada responsável pelas consultas SQL e comunicação com o MySQL.
   * *Exemplos:* `ConsultaDAO`, `MedicoDAO`, `PacienteDAO`
-* **Model:** Representação das entidades do sistema.
+* **Model.entities:** Representação das entidades de negócio do sistema.
   * *Exemplos:* `Consulta`, `Medico`, `Paciente`, `Gerente`, `Endereco`
 
 ---
@@ -90,8 +93,12 @@ facade.listarTodasAsConsultas();
 ```
 
 ### 3. Factory Method
-Utilizado por meio do `FXMLLoader` do JavaFX e da classe `TrocaTela`.
+Utilizado por meio do `FXMLLoader` do JavaFX e da classe `TrocaTela` para isolar a criação de objetos visuais.
 * **Benefícios:** Centralização da criação de telas e redução de repetição de código.
+
+### 4. Strategy
+Encapsula diferentes algoritmos ou comportamentos específicos que podem ser selecionados em tempo de execução.
+* **Benefícios:** Facilidade para alternar lógicas do sistema sem modificar o código do cliente que as consome.
 
 ---
 
