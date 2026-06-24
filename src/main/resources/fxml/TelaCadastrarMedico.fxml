@@ -12,7 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ufersa.ProjetoHospital.Controller.CadastrarMedicoController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.edu.ufersa.ProjetoHospital.Controller.CadastrarMedicoController">
    <top>
       <VBox prefHeight="80.0" prefWidth="900.0" style="-fx-background-color: #2E86AB;" BorderPane.alignment="CENTER">
          <children>
@@ -24,7 +28,7 @@
                   <Insets bottom="10.0" left="20.0" top="15.0" />
                </VBox.margin>
             </Label>
-            <Label text="Preencha todos os campos abaixo para cadastrar um novo médico" textFill="#E0E0E0">
+            <Label text="Preencha os dados do médico abaixo" textFill="#E0E0E0">
                <font>
                   <Font size="12.0" />
                </font>
@@ -36,45 +40,29 @@
       </VBox>
    </top>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox BorderPane.alignment="CENTER">
          <children>
             <GridPane hgap="10.0" vgap="10.0">
-              <columnConstraints>
-                <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="25.0" />
-                <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="25.0" />
+               <columnConstraints>
                   <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="25.0" />
                   <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="25.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+                  <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="25.0" />
+                  <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="25.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" percentHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="50.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
                   <Label text="Nome:" />
-                  <Label text="CPF:" GridPane.columnIndex="2" />
                   <TextField fx:id="txtNomeMedico" GridPane.columnIndex="1" />
+                  <Label text="CPF:" GridPane.columnIndex="2" />
                   <TextField fx:id="txtCpfMedico" GridPane.columnIndex="3" />
+
                   <Label text="CRM:" GridPane.rowIndex="1" />
-                  <Label text="Valor da Consulta:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <TextField fx:id="txtCrmMedico" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Valor da Consulta:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <TextField fx:id="txtValorConsulta" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <Label text="Endereço:" GridPane.rowIndex="2" />
-                  <Label text="Rua:" GridPane.rowIndex="3" />
-                  <Label text="Bairro:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <TextField fx:id="txtRuaEndereco" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="txtBairroEndereco" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                  <Label text="Cidade:" GridPane.rowIndex="4" />
-                  <Label text="CEP:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                  <TextField fx:id="txtCidadeEndereco" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField fx:id="txtCepEndereco" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                  <Label text="Número:" GridPane.rowIndex="5" />
-                  <Label text="Complemento:" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                  <TextField fx:id="txtNumeroEndereco" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <TextField fx:id="txtComplementoEndereco" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                </children>
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -86,8 +74,12 @@
    <bottom>
       <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 20;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnCadastrar" minWidth="100.0" onAction="#cadastrarMedico" style="-fx-padding: 10; -fx-font-size: 12;" text="Cadastrar" />
-            <Button minWidth="100.0" onAction="#voltar" style="-fx-padding: 10; -fx-font-size: 12;" text="Voltar" />
+            <Button fx:id="btnCadastrar" minWidth="100.0" onAction="#cadastrarMedico"
+                    style="-fx-padding: 10; -fx-font-size: 12;"
+                    text="Cadastrar" />
+            <Button minWidth="100.0" onAction="#voltar"
+                    style="-fx-padding: 10; -fx-font-size: 12;"
+                    text="Voltar" />
          </children>
       </HBox>
    </bottom>

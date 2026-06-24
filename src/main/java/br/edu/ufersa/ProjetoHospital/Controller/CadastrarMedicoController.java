@@ -3,7 +3,6 @@ package br.edu.ufersa.ProjetoHospital.Controller;
 import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
 import br.edu.ufersa.ProjetoHospital.Util.SessaoGerente;
 import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
-import br.edu.ufersa.ProjetoHospital.model.entities.Endereco;
 import br.edu.ufersa.ProjetoHospital.model.entities.Gerente;
 import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
 import javafx.fxml.FXML;
@@ -18,68 +17,23 @@ import java.sql.SQLException;
 
 public class CadastrarMedicoController implements FacadeController {
 
-    @FXML
-    private TextField txtNomeMedico;
-
-    @FXML
-    private TextField txtCpfMedico;
-
-    @FXML
-    private TextField txtCrmMedico;
-
-    @FXML
-    private TextField txtValorConsulta;
-
-    @FXML
-    private TextField txtRuaEndereco;
-
-    @FXML
-    private TextField txtCidadeEndereco;
-
-    @FXML
-    private TextField txtBairroEndereco;
-
-    @FXML
-    private TextField txtCepEndereco;
-
-    @FXML
-    private TextField txtNumeroEndereco;
-
-    @FXML
-    private TextField txtComplementoEndereco;
-
-    @FXML
-    private Button btnCadastrar;
+    @FXML private TextField txtNomeMedico;
+    @FXML private TextField txtCpfMedico;
+    @FXML private TextField txtCrmMedico;
+    @FXML private TextField txtValorConsulta;
+    @FXML private Button btnCadastrar;
 
     private HospitalFacade facade;
-
-    // quando essa tela é aberta pra editar um médico já existente, guardamos
-    // o médico aqui. Se for null, a tela continua em modo cadastro normal.
     private Medico medicoEmEdicao;
 
     public void carregarMedicoParaEdicao(Medico medico) {
         this.medicoEmEdicao = medico;
-
         txtNomeMedico.setText(medico.getNome());
         txtCpfMedico.setText(medico.getCpf());
         txtCrmMedico.setText(medico.getCrm());
         txtValorConsulta.setText(String.valueOf(medico.getValorConsulta()));
-
-        // CRM é a chave usada pra localizar o médico no banco, não pode mudar
+        // CRM é chave, não pode mudar
         txtCrmMedico.setEditable(false);
-
-        if (medico.getEndereco() != null) {
-            Endereco endereco = medico.getEndereco();
-            txtRuaEndereco.setText(endereco.getRua() != null ? endereco.getRua() : "");
-            txtCidadeEndereco.setText(endereco.getCidade() != null ? endereco.getCidade() : "");
-            txtBairroEndereco.setText(endereco.getBairro() != null ? endereco.getBairro() : "");
-            txtCepEndereco.setText(endereco.getCep() != null ? endereco.getCep() : "");
-            if (endereco.getNumero() > 0) {
-                txtNumeroEndereco.setText(String.valueOf(endereco.getNumero()));
-            }
-            txtComplementoEndereco.setText(endereco.getComplemento() != null ? endereco.getComplemento() : "");
-        }
-
         btnCadastrar.setText("Salvar Alterações");
     }
 
@@ -101,24 +55,18 @@ public class CadastrarMedicoController implements FacadeController {
                 return;
             }
 
-            Endereco endereco = criarEndereco();
-
             Medico medico = new Medico(
                     txtNomeMedico.getText().trim(),
                     txtCpfMedico.getText().trim(),
-                    endereco,
+                    null,
                     txtCrmMedico.getText().trim(),
                     Double.parseDouble(txtValorConsulta.getText().trim())
             );
 
             Gerente gerente = SessaoGerente.getGerenteLogado();
-
             facade.addMedico(gerente, medico);
 
-            mostrarAlerta("Sucesso",
-                    "Médico cadastrado com sucesso!",
-                    Alert.AlertType.INFORMATION);
-
+            mostrarAlerta("Sucesso", "Médico cadastrado com sucesso!", Alert.AlertType.INFORMATION);
             limparCampos();
 
         } catch (NumberFormatException e) {
@@ -131,7 +79,7 @@ public class CadastrarMedicoController implements FacadeController {
                     Alert.AlertType.ERROR);
             e.printStackTrace();
         } catch (Exception e) {
-            mostrarAlerta("Erro Geral",
+            mostrarAlerta("Erro",
                     "Erro inesperado: " + e.getMessage(),
                     Alert.AlertType.ERROR);
             e.printStackTrace();
@@ -147,21 +95,14 @@ public class CadastrarMedicoController implements FacadeController {
                 return;
             }
 
-            Endereco endereco = criarEndereco();
-
             medicoEmEdicao.setNome(txtNomeMedico.getText().trim());
             medicoEmEdicao.setCpf(txtCpfMedico.getText().trim());
             medicoEmEdicao.setValorConsulta(Double.parseDouble(txtValorConsulta.getText().trim()));
-            medicoEmEdicao.setEndereco(endereco);
 
             Gerente gerente = SessaoGerente.getGerenteLogado();
-
             facade.atualizarMedico(gerente, medicoEmEdicao);
 
-            mostrarAlerta("Sucesso",
-                    "Médico atualizado com sucesso!",
-                    Alert.AlertType.INFORMATION);
-
+            mostrarAlerta("Sucesso", "Médico atualizado com sucesso!", Alert.AlertType.INFORMATION);
             voltarParaListaMedicos();
 
         } catch (NumberFormatException e) {
@@ -174,7 +115,7 @@ public class CadastrarMedicoController implements FacadeController {
                     Alert.AlertType.ERROR);
             e.printStackTrace();
         } catch (Exception e) {
-            mostrarAlerta("Erro Geral",
+            mostrarAlerta("Erro",
                     "Erro inesperado: " + e.getMessage(),
                     Alert.AlertType.ERROR);
             e.printStackTrace();
@@ -185,37 +126,7 @@ public class CadastrarMedicoController implements FacadeController {
         return !txtNomeMedico.getText().isBlank() &&
                 !txtCpfMedico.getText().isBlank() &&
                 !txtCrmMedico.getText().isBlank() &&
-                !txtValorConsulta.getText().isBlank() &&
-                !txtRuaEndereco.getText().isBlank() &&
-                !txtCidadeEndereco.getText().isBlank();
-    }
-
-    private Endereco criarEndereco() {
-        Endereco endereco = new Endereco();
-        endereco.setRua(txtRuaEndereco.getText().trim());
-        endereco.setCidade(txtCidadeEndereco.getText().trim());
-
-        if (!txtBairroEndereco.getText().isBlank()) {
-            endereco.setBairro(txtBairroEndereco.getText().trim());
-        }
-
-        if (!txtCepEndereco.getText().isBlank()) {
-            endereco.setCep(txtCepEndereco.getText().trim());
-        }
-
-        if (!txtNumeroEndereco.getText().isBlank()) {
-            try {
-                endereco.setNumero(Integer.parseInt(txtNumeroEndereco.getText().trim()));
-            } catch (NumberFormatException e) {
-                System.out.println("Número do endereço inválido");
-            }
-        }
-
-        if (!txtComplementoEndereco.getText().isBlank()) {
-            endereco.setComplemento(txtComplementoEndereco.getText().trim());
-        }
-
-        return endereco;
+                !txtValorConsulta.getText().isBlank();
     }
 
     private void limparCampos() {
@@ -223,12 +134,6 @@ public class CadastrarMedicoController implements FacadeController {
         txtCpfMedico.clear();
         txtCrmMedico.clear();
         txtValorConsulta.clear();
-        txtRuaEndereco.clear();
-        txtCidadeEndereco.clear();
-        txtBairroEndereco.clear();
-        txtCepEndereco.clear();
-        txtNumeroEndereco.clear();
-        txtComplementoEndereco.clear();
     }
 
     private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
@@ -241,7 +146,6 @@ public class CadastrarMedicoController implements FacadeController {
 
     @FXML
     public void voltar(ActionEvent event) {
-        System.out.println("Voltando ao menu do gerente");
         if (medicoEmEdicao != null) {
             TrocaTela.trocarTela(event, "/fxml/TelaListarMedicos.fxml", facade);
         } else {
@@ -250,24 +154,18 @@ public class CadastrarMedicoController implements FacadeController {
     }
 
     private void voltarParaListaMedicos() {
-        // reaproveita a janela atual, sem precisar de um ActionEvent
         Stage stage = (Stage) btnCadastrar.getScene().getWindow();
-
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/fxml/TelaListarMedicos.fxml"));
-
             Scene scene = new Scene(loader.load());
-
             Object controller = loader.getController();
             if (controller instanceof FacadeController) {
                 ((FacadeController) controller).setFacade(facade);
             }
-
             boolean telaCheia = stage.isFullScreen();
             stage.setScene(scene);
             stage.setFullScreen(telaCheia);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -276,7 +174,6 @@ public class CadastrarMedicoController implements FacadeController {
     @Override
     public void setFacade(HospitalFacade facade) {
         this.facade = facade;
-        System.out.println(getClass().getSimpleName()
-                + " recebeu facade: " + (facade != null));
+        System.out.println(getClass().getSimpleName() + " recebeu facade: " + (facade != null));
     }
 }
