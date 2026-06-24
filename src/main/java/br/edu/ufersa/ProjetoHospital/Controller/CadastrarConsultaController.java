@@ -2,7 +2,6 @@ package br.edu.ufersa.ProjetoHospital.Controller;
 
 import br.edu.ufersa.ProjetoHospital.Facade.HospitalFacade;
 import br.edu.ufersa.ProjetoHospital.Util.TrocaTela;
-import br.edu.ufersa.ProjetoHospital.model.entities.Endereco;
 import br.edu.ufersa.ProjetoHospital.model.entities.Medico;
 import br.edu.ufersa.ProjetoHospital.model.entities.Paciente;
 import javafx.fxml.FXML;
@@ -12,59 +11,17 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
-import java.sql.SQLException;
 
 public class CadastrarConsultaController implements FacadeController {
 
-    @FXML
-    private DatePicker dpDataConsulta;
+    @FXML private DatePicker dpDataConsulta;
+    @FXML private TextField txtCpfPaciente;
+    @FXML private TextField txtCrmMedico;
+    @FXML private Label lblMensagem;
+    @FXML private Button btnCadastrar;
+    @FXML private Button btnVoltar;
 
     private HospitalFacade facade;
-
-    @FXML
-    private Button btnCadastrar;
-
-    @FXML
-    private Button btnVoltar;
-
-    @FXML
-    private Label lblMensagem;
-
-    @FXML
-    private TextField txtCpfPaciente;
-
-    @FXML
-    private void cadastrarConsulta() {
-        try {
-            Paciente paciente = facade.buscarPacientePorCpf(txtCpfPaciente.getText());
-
-            Endereco endereco = new Endereco();
-            endereco.setRua("Rua do Médico");
-
-            Medico medico = new Medico(
-                    "João Silva",
-                    "11111111111",
-                    endereco,
-                    "CRM12345",
-                    200.0
-            );
-
-            facade.agendarConsulta(paciente, medico, dpDataConsulta.getValue());
-
-            lblMensagem.setStyle("-fx-text-fill: green;");
-            lblMensagem.setText("Consulta cadastrada com sucesso!");
-
-            mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Consulta cadastrada com sucesso!");
-
-        } catch (Exception e) {
-            lblMensagem.setStyle("-fx-text-fill: red;");
-            lblMensagem.setText("Erro ao cadastrar consulta.");
-
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível cadastrar a consulta.");
-
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void setFacade(HospitalFacade facade) {
@@ -73,9 +30,60 @@ public class CadastrarConsultaController implements FacadeController {
     }
 
     @FXML
+    private void cadastrarConsulta() {
+        String cpf = txtCpfPaciente.getText().trim();
+        String crm = txtCrmMedico.getText().trim();
+
+        if (cpf.isBlank() || crm.isBlank() || dpDataConsulta.getValue() == null) {
+            erro("Preencha todos os campos antes de cadastrar.");
+            return;
+        }
+
+        try {
+            Paciente paciente = facade.buscarPacientePorCpf(cpf);
+            if (paciente == null) {
+                erro("Paciente não encontrado para o CPF informado.");
+                return;
+            }
+
+            Medico medico = facade.buscarMedicoPorCrm(crm);
+            if (medico == null) {
+                erro("Médico não encontrado para o CRM informado.");
+                return;
+            }
+
+            facade.agendarConsulta(paciente, medico, dpDataConsulta.getValue());
+
+            sucesso("Consulta cadastrada com sucesso!");
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Consulta cadastrada com sucesso!");
+            limpar();
+
+        } catch (Exception e) {
+            erro("Erro ao cadastrar consulta.");
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível cadastrar a consulta.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void Voltar(ActionEvent event) {
-        System.out.println("Facade é null? " + (facade == null));
         TrocaTela.trocarTela(event, "/fxml/TelaMenuMedico.fxml", facade);
+    }
+
+    private void sucesso(String msg) {
+        lblMensagem.setStyle("-fx-text-fill: green;");
+        lblMensagem.setText(msg);
+    }
+
+    private void erro(String msg) {
+        lblMensagem.setStyle("-fx-text-fill: red;");
+        lblMensagem.setText(msg);
+    }
+
+    private void limpar() {
+        txtCpfPaciente.clear();
+        txtCrmMedico.clear();
+        dpDataConsulta.setValue(null);
     }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {

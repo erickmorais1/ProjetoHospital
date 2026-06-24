@@ -49,15 +49,22 @@
                   <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="75.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" percentHeight="50.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="33.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="33.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="33.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
                   <Label text="CPF do Paciente:" />
-                  <TextField fx:id="txtCpfPaciente" promptText="CPF do Paciente"
-                             GridPane.columnIndex="1" />
-                  <Label text="Data da Consulta:" GridPane.rowIndex="1" />
-                  <DatePicker fx:id="dpDataConsulta" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtCpfPaciente" promptText="CPF do paciente"
+                             GridPane.columnIndex="1" style="-fx-font-size: 13;" />
+
+                  <Label text="CRM do Médico:" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtCrmMedico" promptText="CRM do médico responsável"
+                             GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-size: 13;" />
+
+                  <Label text="Data da Consulta:" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="dpDataConsulta" prefWidth="300.0"
+                              GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
